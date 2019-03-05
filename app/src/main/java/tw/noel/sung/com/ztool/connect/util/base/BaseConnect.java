@@ -21,12 +21,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import tw.noel.sung.com.ztool.connect.util.dialog.ZLoadingDialog;
-import tw.noel.sung.com.ztool.connect.util.implement.ConnectCallback;
+import tw.noel.sung.com.ztool.connect.util.implement.ZConnectCallback;
 
 /**
  * Created by noel on 2019/1/21.
  */
-
 public class BaseConnect {
 
 
@@ -42,7 +41,11 @@ public class BaseConnect {
     }
 
 
-    protected final int TIME_OUT = 15000;
+    private final int DEFAULT_TIME_OUT = 15 * 1000;
+    private int connectTimeOut = DEFAULT_TIME_OUT;
+    private int writeTimeOut = DEFAULT_TIME_OUT;
+    private int readTimeOut = DEFAULT_TIME_OUT;
+
 
     protected OkHttpClient client;
     protected Request request;
@@ -69,19 +72,59 @@ public class BaseConnect {
     public @interface ConnectResult {
     }
 
-    protected ConnectCallback connectCallback;
+    protected ZConnectCallback ZConnectCallback;
 
     public BaseConnect(Context context) {
         this.context = context;
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(context);
         client = new OkHttpClient.Builder()
-                .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                .writeTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
-                .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
                 .build();
     }
 
+    //------------------
+
+    /***
+     * 連線time out
+     */
+    public void setConnectTimeOut(int connectTimeOut) {
+        this.connectTimeOut = connectTimeOut;
+        client = client.newBuilder()
+                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .build();
+    }
+
+    //------------------
+
+    /***
+     * 寫入 time out
+     */
+    public void setWriteTimeOut(int writeTimeOut) {
+        this.writeTimeOut = writeTimeOut;
+        client = client.newBuilder()
+                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .build();
+    }
+    //----------------
+
+    /***
+     * 讀取time out
+     */
+    public void setReadTimeOut(int readTimeOut) {
+        this.readTimeOut = readTimeOut;
+        client = client.newBuilder()
+                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .build();
+    }
 
     //------------------
 
@@ -112,7 +155,7 @@ public class BaseConnect {
     /***
      * 傳遞 連線結果  成功
      */
-    protected void success( @Nullable  Object object,int statusCode) {
+    protected void success(@Nullable Object object, int statusCode) {
         Message message = Message.obtain();
         message.what = SUCCESS;
         message.obj = object;
@@ -125,7 +168,7 @@ public class BaseConnect {
     /***
      * 傳遞 連線結果 失敗
      */
-    protected void fail( ) {
+    protected void fail() {
         Message message = Message.obtain();
         message.what = FAIL;
         handler.sendMessage(message);
@@ -149,11 +192,11 @@ public class BaseConnect {
                     break;
                 //連線成功
                 case SUCCESS:
-                    connectCallback.onSuccess((String) msg.obj,msg.arg1);
+                    ZConnectCallback.onSuccess((String) msg.obj, msg.arg1);
                     break;
                 //連線失敗
                 case FAIL:
-                    connectCallback.onFailed();
+                    ZConnectCallback.onFailed();
                     break;
             }
 

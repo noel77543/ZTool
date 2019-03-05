@@ -14,6 +14,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 
+/**
+ * Created by noel on 2019/1/21.
+ */
 public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
 
     private final String INNER_CIRCLE_COLOR = "#FFFFFF";

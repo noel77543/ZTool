@@ -9,10 +9,8 @@ import android.widget.LinearLayout;
 import tw.noel.sung.com.ztool.connect.util.views.ZLoadingView;
 
 /**
- * Created by noel on 2018/6/12.
+ * Created by noel on 2019/1/21.
  */
-
-
 public class ZLoadingDialog extends Dialog {
 
     private LinearLayout layout;

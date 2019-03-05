@@ -18,26 +18,33 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import tw.noel.sung.com.ztool.R;
 import tw.noel.sung.com.ztool.connect.util.base.BaseConnect;
-import tw.noel.sung.com.ztool.connect.util.implement.ConnectCallback;
+import tw.noel.sung.com.ztool.connect.util.implement.ZConnectCallback;
 
+/**
+ * Created by noel on 2019/1/21.
+ */
 public class ZConnect extends BaseConnect implements Callback {
 
     public ZConnect(Context context) {
         super(context);
     }
 
+
     //---------------
 
     /***
-     *  http get
-     *  無header
+     * 使用情境:
+     * 1.http get
+     *  ... ... ... ... ... ...
+     * @param apiURL url
+     * @param ZConnectCallback callback
      */
-    public void get(String apiURL, final ConnectCallback connectCallback) {
+    public void get(String apiURL, final ZConnectCallback ZConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.connectCallback = connectCallback;
+        this.ZConnectCallback = ZConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
         request = new Request.Builder()
                 .url(apiURL)
@@ -48,17 +55,23 @@ public class ZConnect extends BaseConnect implements Callback {
 
     //---------------
 
+
     /***
-     *  http get
-     *  有header
+     *  使用情境 :
+     *  1. http get
+     *  2. params
+     *  ... ... ... ... ... ...
+     * @param apiURL url
+     * @param headers header
+     * @param ZConnectCallback callback
      */
-    public void get(String apiURL, Map<String, String> headers, final ConnectCallback connectCallback) {
+    public void get(String apiURL, Map<String, String> headers, final ZConnectCallback ZConnectCallback) {
 
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.connectCallback = connectCallback;
+        this.ZConnectCallback = ZConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
 
         Request.Builder builder = new Request.Builder()
@@ -75,30 +88,43 @@ public class ZConnect extends BaseConnect implements Callback {
 
     //-----------------
 
+
     /***
-     *  http post
-     *  有header
-     *  有params
+     *   使用情境 :
+     *   1.http post
+     *   2.header
+     *   3.params
+     *  ... ... ... ... ... ...
+     * @param apiURL url
+     * @param headers header
+     * @param params keyValue 參數
+     * @param ZConnectCallback callback
      */
-    public void post(String apiURL, Map<String, String> headers, Map<String, String> params, final ConnectCallback connectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, final ZConnectCallback ZConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.connectCallback = connectCallback;
+        this.ZConnectCallback = ZConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
 
         Request.Builder builder = new Request.Builder()
                 .url(apiURL);
 
-        for (String key : headers.keySet()) {
-            builder.addHeader(key, headers.get(key));
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                builder.addHeader(key, headers.get(key));
+            }
         }
 
+
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        for (String key : params.keySet()) {
-            formBodyBuilder.add(key, params.get(key));
+        if (params != null) {
+            for (String key : params.keySet()) {
+                formBodyBuilder.add(key, params.get(key));
+            }
         }
+
 
         requestBody = formBodyBuilder.build();
         request = builder.post(requestBody).build();
@@ -109,53 +135,32 @@ public class ZConnect extends BaseConnect implements Callback {
     //-----------------
 
     /***
-     *  http post
-     *  無header
-     *  有params
+     *  使用情境:
+     *  1. http post
+     *  2. header
+     *  3. json request
+     *  ... ... ... ... ... ...
+     * @param apiURL url
+     * @param headers header
+     * @param requestModel  json object model
+     * @param ZConnectCallback callback
      */
-    public void post(String apiURL, Map<String, String> params, final ConnectCallback connectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, Object requestModel, final ZConnectCallback ZConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.connectCallback = connectCallback;
-
-        displayLoadingDialog(SHOW_DIALOG);
-
-
-        FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        for (String key : params.keySet()) {
-            formBodyBuilder.add(key, params.get(key));
-        }
-        requestBody = formBodyBuilder.build();
-
-        request = new Request.Builder()
-                .url(apiURL).post(requestBody).build();
-
-        client.newCall(request).enqueue(this);
-    }
-
-    //-----------------
-
-    /***
-     *  http post
-     *  有header
-     *  有 json request
-     */
-    public void post(String apiURL, Map<String, String> headers, Object requestModel, final ConnectCallback connectCallback) {
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        this.connectCallback = connectCallback;
+        this.ZConnectCallback = ZConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
         Request.Builder builder = new Request.Builder()
                 .url(apiURL);
 
-        for (String key : headers.keySet()) {
-            builder.addHeader(key, headers.get(key));
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                builder.addHeader(key, headers.get(key));
+            }
         }
 
         requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
@@ -164,48 +169,30 @@ public class ZConnect extends BaseConnect implements Callback {
         client.newCall(request).enqueue(this);
     }
 
-
-    //-----------------
-
-    /***
-     *  http post
-     *  無header
-     *  有 json request
-     */
-    public void post(String apiURL, Object requestModel, final ConnectCallback connectCallback) {
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        this.connectCallback = connectCallback;
-
-        displayLoadingDialog(SHOW_DIALOG);
-
-        requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
-
-        request = new Request.Builder()
-                .url(apiURL)
-                .post(requestBody)
-                .build();
-
-        client.newCall(request).enqueue(this);
-    }
 
     //-----------------------
 
     /***
-     *  http post
-     *  有header
-     *  有params
-     *  post file
-     *  如果不需params其他參數 則欄位帶入null即可
+     *  1. http post
+     *  2. 上傳檔案
+     *  3. params
+     *  4. header
+     *  ... ... ... ... ... ...
+     * @param apiURL url
+     * @param headers 如果不需headers 則欄位帶入null即可
+     * @param params 如果不需params 則欄位帶入null即可
+     * @param fileKey 後台此欄位key值
+     * @param fileName 檔名
+     * @param file 檔案
+     * @param fileType 檔案類型 參考 @uploadFileType
+     * @param ZConnectCallback callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, final ConnectCallback connectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, final ZConnectCallback ZConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.connectCallback = connectCallback;
+        this.ZConnectCallback = ZConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
@@ -219,39 +206,66 @@ public class ZConnect extends BaseConnect implements Callback {
             }
         }
 
-        requestBody = builder.build();
-        request = new Request.Builder()
-                .url(apiURL).post(requestBody).build();
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(apiURL).post(builder.build());
 
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                requestBuilder.addHeader(key, headers.get(key));
+            }
+        }
+
+        request = requestBuilder.build();
         client.newCall(request).enqueue(this);
     }
 
     //----------------------
 
-    /***
-     *  http post
-     *  有header
-     *  有json request
-     *  post file
+    /**
+     * 1. http post
+     * 2. 上傳檔案
+     * 3. json request
+     * 4. header
+     * ... ... ... ... ... ...
+     *
+     * @param apiURL           url
+     * @param headers          如果不需header 則欄位帶入null即可
+     * @param requestModel     如果不需requestModel 則欄位帶入null即可
+     * @param fileKey          後台此欄位key值
+     * @param fileName         檔名
+     * @param file             檔案
+     * @param fileType         檔案類型 參考 @uploadFileType
+     * @param ZConnectCallback callback
      */
-    public void post(String apiURL, Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, final ConnectCallback connectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, final ZConnectCallback ZConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.connectCallback = connectCallback;
+        this.ZConnectCallback = ZConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
-        requestBody = new MultipartBody.Builder()
+
+        MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart(fileKey, fileName, RequestBody.create(MediaType.parse(fileType), file))
-                .addPart(RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel)))
-                .build();
+                .addFormDataPart(fileKey, fileName, RequestBody.create(MediaType.parse(fileType), file));
 
-        request = new Request.Builder()
-                .url(apiURL).post(requestBody).build();
+        if (requestModel != null) {
+            builder.addPart(RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel)));
+        }
 
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(apiURL).post(builder.build());
+
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                requestBuilder.addHeader(key, headers.get(key));
+            }
+        }
+
+        request = requestBuilder.build();
         client.newCall(request).enqueue(this);
     }
 
