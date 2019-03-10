@@ -5,11 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Created by noel on 2019/3/10.
  */
@@ -82,6 +86,28 @@ public class ZFileTool {
             Toast.makeText(context, context.getString(tw.noel.sung.com.ztool.R.string.z_file_util_file_not_found), Toast.LENGTH_SHORT).show();
         }
         return null;
+    }
+
+    //-------------
+
+    /***
+     * 讀取 assets中的檔案
+     */
+    public String getAssetsFileToString(String fileName) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(context.getAssets().open(fileName), "UTF-8"));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
 
 }
