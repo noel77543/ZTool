@@ -20,7 +20,7 @@ import android.view.animation.RotateAnimation;
 public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
 
     private final String INNER_CIRCLE_COLOR = "#FFFFFF";
-    private final String OUTTER_CIRCLE_COLOR = "#000000";
+    private final String OUTER_CIRCLE_COLOR = "#000000";
 
     private final int SIZE = 100;
 
@@ -107,7 +107,7 @@ public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
      */
     private void drawOuterCircle() {
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.parseColor(OUTTER_CIRCLE_COLOR));
+        paint.setColor(Color.parseColor(OUTER_CIRCLE_COLOR));
         backgroundCanvas.drawCircle(radius, radius, radius, paint);
     }
 

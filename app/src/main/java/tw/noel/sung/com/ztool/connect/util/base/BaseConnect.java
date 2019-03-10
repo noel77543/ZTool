@@ -1,6 +1,7 @@
 package tw.noel.sung.com.ztool.connect.util.base;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -52,7 +53,8 @@ public class BaseConnect {
     protected Gson gson;
     protected RequestBody requestBody;
     protected Context context;
-    protected ZLoadingDialog zLoadingDialog;
+
+    protected Dialog zLoadingDialog;
 
 
     public static final int SHOW_DIALOG = 77;
@@ -84,6 +86,15 @@ public class BaseConnect {
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
                 .build();
     }
+
+    //------------------
+    /***
+     *  自訂客製化dialog
+     */
+    public void setCustomLoadingDialog(Dialog dialog){
+        zLoadingDialog = dialog;
+    }
+
 
     //------------------
 
