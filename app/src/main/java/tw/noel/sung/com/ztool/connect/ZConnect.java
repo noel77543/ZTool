@@ -37,14 +37,14 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * 1.http get
      *  ... ... ... ... ... ...
      * @param apiURL url
-     * @param ZConnectCallback callback
+     * @param zConnectCallback callback
      */
-    public void get(String apiURL, final ZConnectCallback ZConnectCallback) {
+    public void get(String apiURL, final ZConnectCallback zConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectCallback = ZConnectCallback;
+        this.zConnectCallback = zConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
         request = new Request.Builder()
                 .url(apiURL)
@@ -63,15 +63,15 @@ public class ZConnect extends ZBaseConnect implements Callback {
      *  ... ... ... ... ... ...
      * @param apiURL url
      * @param headers header
-     * @param ZConnectCallback callback
+     * @param zConnectCallback callback
      */
-    public void get(String apiURL, Map<String, String> headers, final ZConnectCallback ZConnectCallback) {
+    public void get(String apiURL, Map<String, String> headers, final ZConnectCallback zConnectCallback) {
 
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectCallback = ZConnectCallback;
+        this.zConnectCallback = zConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
 
         Request.Builder builder = new Request.Builder()
@@ -98,14 +98,14 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param apiURL url
      * @param headers header
      * @param params keyValue 參數
-     * @param ZConnectCallback callback
+     * @param zConnectCallback callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, final ZConnectCallback ZConnectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, final ZConnectCallback zConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectCallback = ZConnectCallback;
+        this.zConnectCallback = zConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
 
         Request.Builder builder = new Request.Builder()
@@ -143,14 +143,14 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param apiURL url
      * @param headers header
      * @param requestModel  json object model
-     * @param ZConnectCallback callback
+     * @param zConnectCallback callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, Object requestModel, final ZConnectCallback ZConnectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, Object requestModel, final ZConnectCallback zConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectCallback = ZConnectCallback;
+        this.zConnectCallback = zConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
@@ -185,14 +185,14 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param fileName 檔名
      * @param file 檔案
      * @param fileType 檔案類型 參考 @uploadFileType
-     * @param ZConnectCallback callback
+     * @param zConnectCallback callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, final ZConnectCallback ZConnectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, final ZConnectCallback zConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectCallback = ZConnectCallback;
+        this.zConnectCallback = zConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
@@ -235,14 +235,14 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param fileName         檔名
      * @param file             檔案
      * @param fileType         檔案類型 參考 @uploadFileType
-     * @param ZConnectCallback callback
+     * @param zConnectCallback callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, final ZConnectCallback ZConnectCallback) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, final ZConnectCallback zConnectCallback) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectCallback = ZConnectCallback;
+        this.zConnectCallback = zConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
