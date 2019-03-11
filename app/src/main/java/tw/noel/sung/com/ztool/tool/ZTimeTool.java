@@ -28,7 +28,7 @@ public class ZTimeTool {
     //-------------------
 
     /***
-     * 是否在指定時間之前
+     * 目前時間是否在指定時間之前
      * @param targetTime
      * @return
      */
@@ -41,7 +41,7 @@ public class ZTimeTool {
     //-------------------
 
     /***
-     * 是否在指定時間之後
+     *  目前時間是否在指定時間之後
      * @return
      */
     public boolean isAfter(long targetTime) {

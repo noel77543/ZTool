@@ -27,7 +27,7 @@ import tw.noel.sung.com.ztool.connect.util.implement.ZConnectCallback;
 /**
  * Created by noel on 2019/1/21.
  */
-public class BaseConnect {
+public class ZBaseConnect {
 
 
     public final static MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
@@ -74,9 +74,9 @@ public class BaseConnect {
     public @interface ConnectResult {
     }
 
-    protected ZConnectCallback ZConnectCallback;
+    protected ZConnectCallback zConnectCallback;
 
-    public BaseConnect(Context context) {
+    public ZBaseConnect(Context context) {
         this.context = context;
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(context);
@@ -91,7 +91,7 @@ public class BaseConnect {
     /***
      *  自訂客製化dialog
      */
-    public void setCustomLoadingDialog(Dialog dialog){
+    public void setCustomLoadingDialog(@Nullable Dialog dialog){
         zLoadingDialog = dialog;
     }
 
@@ -156,9 +156,11 @@ public class BaseConnect {
      * @param status
      */
     protected void displayLoadingDialog(@LoadingDialogStatus int status) {
-        Message message = Message.obtain();
-        message.what = status;
-        handler.sendMessage(message);
+        if(zLoadingDialog != null){
+            Message message = Message.obtain();
+            message.what = status;
+            handler.sendMessage(message);
+        }
     }
 
     //----------------
@@ -203,11 +205,11 @@ public class BaseConnect {
                     break;
                 //連線成功
                 case SUCCESS:
-                    ZConnectCallback.onSuccess((String) msg.obj, msg.arg1);
+                    zConnectCallback.onSuccess((String) msg.obj, msg.arg1);
                     break;
                 //連線失敗
                 case FAIL:
-                    ZConnectCallback.onFailed();
+                    zConnectCallback.onFailed();
                     break;
             }
 

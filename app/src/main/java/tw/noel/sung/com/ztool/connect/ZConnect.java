@@ -17,13 +17,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import tw.noel.sung.com.ztool.R;
-import tw.noel.sung.com.ztool.connect.util.base.BaseConnect;
+import tw.noel.sung.com.ztool.connect.util.base.ZBaseConnect;
 import tw.noel.sung.com.ztool.connect.util.implement.ZConnectCallback;
 
 /**
  * Created by noel on 2019/1/21.
  */
-public class ZConnect extends BaseConnect implements Callback {
+public class ZConnect extends ZBaseConnect implements Callback {
 
     public ZConnect(Context context) {
         super(context);
@@ -44,7 +44,7 @@ public class ZConnect extends BaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.ZConnectCallback = ZConnectCallback;
+        this.zConnectCallback = ZConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
         request = new Request.Builder()
                 .url(apiURL)
@@ -71,7 +71,7 @@ public class ZConnect extends BaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.ZConnectCallback = ZConnectCallback;
+        this.zConnectCallback = ZConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
 
         Request.Builder builder = new Request.Builder()
@@ -105,7 +105,7 @@ public class ZConnect extends BaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.ZConnectCallback = ZConnectCallback;
+        this.zConnectCallback = ZConnectCallback;
         displayLoadingDialog(SHOW_DIALOG);
 
         Request.Builder builder = new Request.Builder()
@@ -150,7 +150,7 @@ public class ZConnect extends BaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.ZConnectCallback = ZConnectCallback;
+        this.zConnectCallback = ZConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
@@ -192,7 +192,7 @@ public class ZConnect extends BaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.ZConnectCallback = ZConnectCallback;
+        this.zConnectCallback = ZConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
@@ -242,7 +242,7 @@ public class ZConnect extends BaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.ZConnectCallback = ZConnectCallback;
+        this.zConnectCallback = ZConnectCallback;
 
         displayLoadingDialog(SHOW_DIALOG);
 
