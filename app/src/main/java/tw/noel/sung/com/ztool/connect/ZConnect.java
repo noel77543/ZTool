@@ -4,8 +4,10 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -16,6 +18,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import tw.noel.sung.com.ztool.R;
 import tw.noel.sung.com.ztool.connect.util.base.ZBaseConnect;
 import tw.noel.sung.com.ztool.connect.util.implement.ZConnectCallback;
@@ -295,9 +298,10 @@ public class ZConnect extends ZBaseConnect implements Callback {
     public void onResponse(Call call, Response response) {
         displayLoadingDialog(DISMISS_DIALOG);
 
+        ResponseBody responseBody = response.body();
+        InputStream inputStream = responseBody.byteStream();
         try {
-            String jsonString = response.body().string();
-            success(jsonString,response.body().byteStream(), response.code());
+            success(responseBody.string(),new BufferedInputStream(inputStream), response.code());
         } catch (IOException e) {
             e.printStackTrace();
         }
