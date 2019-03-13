@@ -13,6 +13,7 @@ import android.support.annotation.StringDef;
 
 import com.google.gson.Gson;
 
+import java.io.InputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.TimeUnit;
@@ -66,8 +67,8 @@ public class ZBaseConnect {
     public @interface LoadingDialogStatus {
     }
 
-    public static final int SUCCESS = 79;
-    public static final int FAIL = 80;
+    public static final int SUCCESS = 80;
+    public static final int FAIL = 81;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({SUCCESS, FAIL})
@@ -75,6 +76,8 @@ public class ZBaseConnect {
     }
 
     protected ZConnectCallback zConnectCallback;
+    private String responseString;
+    private InputStream inputStream;
 
     public ZBaseConnect(Context context) {
         this.context = context;
@@ -88,10 +91,11 @@ public class ZBaseConnect {
     }
 
     //------------------
+
     /***
      *  自訂客製化dialog
      */
-    public void setCustomLoadingDialog(@Nullable Dialog dialog){
+    public void setCustomLoadingDialog(@Nullable Dialog dialog) {
         zLoadingDialog = dialog;
     }
 
@@ -156,7 +160,7 @@ public class ZBaseConnect {
      * @param status
      */
     protected void displayLoadingDialog(@LoadingDialogStatus int status) {
-        if(zLoadingDialog != null){
+        if (zLoadingDialog != null) {
             Message message = Message.obtain();
             message.what = status;
             handler.sendMessage(message);
@@ -168,10 +172,11 @@ public class ZBaseConnect {
     /***
      * 傳遞 連線結果  成功
      */
-    protected void success(@Nullable Object object, int statusCode) {
+    protected void success(String responseString, InputStream inputStream, int statusCode) {
+        this.responseString = responseString;
+        this.inputStream = inputStream;
         Message message = Message.obtain();
         message.what = SUCCESS;
-        message.obj = object;
         message.arg1 = statusCode;
         handler.sendMessage(message);
     }
@@ -205,8 +210,9 @@ public class ZBaseConnect {
                     break;
                 //連線成功
                 case SUCCESS:
-                    zConnectCallback.onSuccess((String) msg.obj, msg.arg1);
+                    zConnectCallback.onSuccess(responseString, inputStream, msg.arg1);
                     break;
+
                 //連線失敗
                 case FAIL:
                     zConnectCallback.onFailed();

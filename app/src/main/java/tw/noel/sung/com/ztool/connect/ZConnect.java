@@ -53,6 +53,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
         client.newCall(request).enqueue(this);
     }
 
+
     //---------------
 
 
@@ -85,6 +86,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
         request = builder.build();
         client.newCall(request).enqueue(this);
     }
+
 
     //-----------------
 
@@ -295,8 +297,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
 
         try {
             String jsonString = response.body().string();
-            success(jsonString, response.code());
-
+            success(jsonString,response.body().byteStream(), response.code());
         } catch (IOException e) {
             e.printStackTrace();
         }
