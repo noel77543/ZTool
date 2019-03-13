@@ -23,7 +23,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import tw.noel.sung.com.ztool.connect.util.dialog.ZLoadingDialog;
-import tw.noel.sung.com.ztool.connect.util.implement.ZConnectCallback;
+import tw.noel.sung.com.ztool.connect.util.implement.ZConnectHandler;
 
 /**
  * Created by noel on 2019/1/21.
@@ -36,6 +36,7 @@ public class ZBaseConnect {
     public final static String _FILE_TYPE_JPG = "image/jpg";
     public final static String _FILE_TYPE_PNG = "image/png";
     public final static String _FILE_TYPE_CSV = "text/csv";
+
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({_FILE_TYPE_JPG, _FILE_TYPE_PNG, _FILE_TYPE_CSV})
@@ -67,17 +68,17 @@ public class ZBaseConnect {
     public @interface LoadingDialogStatus {
     }
 
-    public static final int SUCCESS = 80;
+    public static final int SUCCESS_STRING = 79;
+    public static final int SUCCESS_INPUT_STREAM = 80;
     public static final int FAIL = 81;
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({SUCCESS, FAIL})
+    @IntDef({SUCCESS_STRING, SUCCESS_INPUT_STREAM, FAIL})
     public @interface ConnectResult {
     }
 
-    protected ZConnectCallback zConnectCallback;
-    private String responseString;
-    private InputStream inputStream;
+    protected ZConnectHandler zConnectHandler;
+
 
     public ZBaseConnect(Context context) {
         this.context = context;
@@ -170,16 +171,30 @@ public class ZBaseConnect {
     //----------------
 
     /***
-     * 傳遞 連線結果  成功
+     * 傳遞 連線結果  成功  inputstream
      */
-    protected void success(String responseString, InputStream inputStream, int statusCode) {
-        this.responseString = responseString;
-        this.inputStream = inputStream;
+    protected void success(InputStream inputStream, int statusCode) {
         Message message = Message.obtain();
-        message.what = SUCCESS;
+        message.what = SUCCESS_INPUT_STREAM;
+        message.obj = inputStream;
         message.arg1 = statusCode;
         handler.sendMessage(message);
     }
+
+    //---------------
+
+
+    /***
+     * 傳遞 連線結果  成功  inputstream
+     */
+    protected void success(String string, int statusCode) {
+        Message message = Message.obtain();
+        message.what = SUCCESS_STRING;
+        message.obj = string;
+        message.arg1 = statusCode;
+        handler.sendMessage(message);
+    }
+
 
     //----------------
 
@@ -208,14 +223,18 @@ public class ZBaseConnect {
                 case DISMISS_DIALOG:
                     zLoadingDialog.dismiss();
                     break;
-                //連線成功
-                case SUCCESS:
-                    zConnectCallback.onSuccess(responseString, inputStream, msg.arg1);
+                //連線成功 String
+                case SUCCESS_STRING:
+                    zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
+                    break;
+                //連線成功 inputstream
+                case SUCCESS_INPUT_STREAM:
+                    zConnectHandler.OnInputStreamResponse((InputStream) msg.obj, msg.arg1);
                     break;
 
                 //連線失敗
                 case FAIL:
-                    zConnectCallback.onFailed();
+                    zConnectHandler.OnFail();
                     break;
             }
 
