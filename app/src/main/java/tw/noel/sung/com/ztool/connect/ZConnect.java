@@ -2,6 +2,7 @@ package tw.noel.sung.com.ztool.connect;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -44,7 +45,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param apiURL url
      * @param zConnectHandler callback
      */
-    public void get(String apiURL,  ZConnectHandler zConnectHandler) {
+    public void get(String apiURL, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -55,7 +56,8 @@ public class ZConnect extends ZBaseConnect implements Callback {
                 .url(apiURL)
                 .get()
                 .build();
-        client.newCall(request).enqueue(this);
+        okHttpClient.newCall(request).enqueue(this);
+
     }
 
     //---------------
@@ -70,7 +72,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param headers header
      * @param zConnectHandler callback
      */
-    public void get(String apiURL, Map<String, String> headers,  ZConnectHandler zConnectHandler) {
+    public void get(String apiURL, Map<String, String> headers, ZConnectHandler zConnectHandler) {
 
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
@@ -88,7 +90,8 @@ public class ZConnect extends ZBaseConnect implements Callback {
         }
 
         request = builder.build();
-        client.newCall(request).enqueue(this);
+        okHttpClient.newCall(request).enqueue(this);
+
     }
 
 
@@ -106,7 +109,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param params keyValue 參數
      * @param zConnectHandler callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params,  ZConnectHandler zConnectHandler) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -134,7 +137,9 @@ public class ZConnect extends ZBaseConnect implements Callback {
 
         requestBody = formBodyBuilder.build();
         request = builder.post(requestBody).build();
-        client.newCall(request).enqueue(this);
+
+        okHttpClient.newCall(request).enqueue(this);
+
     }
 
 
@@ -151,7 +156,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param requestModel  json object model
      * @param zConnectHandler callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, Object requestModel,  ZConnectHandler zConnectHandler) {
+    public void post(String apiURL, @Nullable Map<String, String> headers, Object requestModel, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -170,9 +175,8 @@ public class ZConnect extends ZBaseConnect implements Callback {
         }
 
         requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
-
         request = builder.post(requestBody).build();
-        client.newCall(request).enqueue(this);
+        okHttpClient.newCall(request).enqueue(this);
     }
 
 
@@ -222,7 +226,8 @@ public class ZConnect extends ZBaseConnect implements Callback {
         }
 
         request = requestBuilder.build();
-        client.newCall(request).enqueue(this);
+        okHttpClient.newCall(request).enqueue(this);
+
     }
 
     //----------------------
@@ -234,13 +239,13 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * 4. header
      * ... ... ... ... ... ...
      *
-     * @param apiURL           url
-     * @param headers          如果不需header 則欄位帶入null即可
-     * @param requestModel     如果不需requestModel 則欄位帶入null即可
-     * @param fileKey          後台此欄位key值
-     * @param fileName         檔名
-     * @param file             檔案
-     * @param fileType         檔案類型 參考 @uploadFileType
+     * @param apiURL          url
+     * @param headers         如果不需header 則欄位帶入null即可
+     * @param requestModel    如果不需requestModel 則欄位帶入null即可
+     * @param fileKey         後台此欄位key值
+     * @param fileName        檔名
+     * @param file            檔案
+     * @param fileType        檔案類型 參考 @uploadFileType
      * @param zConnectHandler callback
      */
     public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
@@ -270,11 +275,9 @@ public class ZConnect extends ZBaseConnect implements Callback {
                 requestBuilder.addHeader(key, headers.get(key));
             }
         }
-
         request = requestBuilder.build();
-        client.newCall(request).enqueue(this);
+        okHttpClient.newCall(request).enqueue(this);
     }
-
 
 
     //-----------------
@@ -313,16 +316,19 @@ public class ZConnect extends ZBaseConnect implements Callback {
             InputStream responseBodyInputStream = buffer.clone().inputStream();
             int code = response.code();
 
-            if (responseBody.contentType().type().equals("text")) {
+            String type = responseBody.contentType().type();
+            Log.d("ZConnect", "type =" + type);
+            if (type.equals("text") || type.equals("application")) {
                 success(responseBodyString, code);
-            } else  {
+                Log.d("ZConnect", "ResponseContentType=text || application");
+            } else {
                 success(responseBodyInputStream, code);
+                Log.d("ZConnect", "ResponseContentType=InputStream");
             }
 
+            source.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 }

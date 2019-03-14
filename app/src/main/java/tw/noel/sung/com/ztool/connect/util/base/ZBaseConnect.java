@@ -50,7 +50,7 @@ public class ZBaseConnect {
     private int readTimeOut = DEFAULT_TIME_OUT;
 
 
-    protected OkHttpClient client;
+    protected static OkHttpClient okHttpClient;
     protected Request request;
     protected Gson gson;
     protected RequestBody requestBody;
@@ -84,12 +84,13 @@ public class ZBaseConnect {
         this.context = context;
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(context);
-        client = new OkHttpClient.Builder()
+        okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
                 .build();
     }
+
 
     //------------------
 
@@ -108,7 +109,7 @@ public class ZBaseConnect {
      */
     public void setConnectTimeOut(int connectTimeOut) {
         this.connectTimeOut = connectTimeOut;
-        client = client.newBuilder()
+        okHttpClient = okHttpClient.newBuilder()
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
@@ -122,7 +123,7 @@ public class ZBaseConnect {
      */
     public void setWriteTimeOut(int writeTimeOut) {
         this.writeTimeOut = writeTimeOut;
-        client = client.newBuilder()
+        okHttpClient = okHttpClient.newBuilder()
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
@@ -135,7 +136,7 @@ public class ZBaseConnect {
      */
     public void setReadTimeOut(int readTimeOut) {
         this.readTimeOut = readTimeOut;
-        client = client.newBuilder()
+        okHttpClient = okHttpClient.newBuilder()
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
@@ -231,7 +232,6 @@ public class ZBaseConnect {
                 case SUCCESS_INPUT_STREAM:
                     zConnectHandler.OnInputStreamResponse((InputStream) msg.obj, msg.arg1);
                     break;
-
                 //連線失敗
                 case FAIL:
                     zConnectHandler.OnFail();
