@@ -50,7 +50,7 @@ public class ZBaseConnect {
     private int readTimeOut = DEFAULT_TIME_OUT;
 
 
-    protected static OkHttpClient okHttpClient;
+    protected OkHttpClient okHttpClient;
     protected Request request;
     protected Gson gson;
     protected RequestBody requestBody;

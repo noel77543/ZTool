@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -316,16 +317,8 @@ public class ZConnect extends ZBaseConnect implements Callback {
             InputStream responseBodyInputStream = buffer.clone().inputStream();
             int code = response.code();
 
-            String type = responseBody.contentType().type();
-            Log.d("ZConnect", "type =" + type);
-            if (type.equals("text") || type.equals("application")) {
-                success(responseBodyString, code);
-                Log.d("ZConnect", "ResponseContentType=text || application");
-            } else {
-                success(responseBodyInputStream, code);
-                Log.d("ZConnect", "ResponseContentType=InputStream");
-            }
-
+            success(responseBodyString, code);
+            success(new BufferedInputStream(responseBodyInputStream,1024), code);
             source.close();
         } catch (IOException e) {
             e.printStackTrace();
