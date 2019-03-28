@@ -14,11 +14,33 @@ public class ZCheckFormatTool {
     //-------
 
     /***
-     * 是否都是數字
+     * 是否都是整數
      */
-    public boolean isNumber(String text) {
+    public boolean isInteger(String text) {
         return Pattern.compile("^[0-9]+$").matcher(text).matches();
     }
+
+    //-------
+
+    /***
+     * 是否是浮點數
+     * 僅會存在一個小數點
+     */
+    public boolean isFloat(String text) {
+        return Pattern.compile("^[0-9]+[.]{1}+[0-9]+$").matcher(text).matches();
+    }
+
+
+    //-------
+
+    /***
+     * 是否是整數或者浮點數
+     * 僅會存在一個小數點
+     */
+    public boolean isNumber(String text) {
+        return Pattern.compile("^[0-9]+([.]{1}[0-9]+){0,1}+$").matcher(text).matches();
+    }
+
 
     //-------
 
