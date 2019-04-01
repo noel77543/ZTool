@@ -34,10 +34,10 @@ public class ZCheckFormatTool {
 
     /***
      * 是否是浮點數
-     * 可指定小數點後幾位
+     * 可指定小數點後 afterPointStart 至 afterPointEnd位
      */
-    public boolean isFloat(String text, int afterPoint) {
-        return Pattern.compile("^[0-9]+(.[0-9]{" + afterPoint + "})?+$").matcher(text).matches();
+    public boolean isFloat(String text, int afterPointStart,int afterPointEnd) {
+        return Pattern.compile("^[0-9]+(.[0-9]{"+afterPointStart+","+afterPointEnd+"})?+$").matcher(text).matches();
     }
     //-------
 
