@@ -45,12 +45,9 @@ public class ZBaseConnect {
 
 
     private final int DEFAULT_TIME_OUT = 15 * 1000;
-    private int connectTimeOut = DEFAULT_TIME_OUT;
-    private int writeTimeOut = DEFAULT_TIME_OUT;
-    private int readTimeOut = DEFAULT_TIME_OUT;
-
-
-    protected OkHttpClient okHttpClient;
+    protected int connectTimeOut = DEFAULT_TIME_OUT;
+    protected int writeTimeOut = DEFAULT_TIME_OUT;
+    protected int readTimeOut = DEFAULT_TIME_OUT;
     protected Request request;
     protected Gson gson;
     protected RequestBody requestBody;
@@ -68,27 +65,11 @@ public class ZBaseConnect {
     public @interface LoadingDialogStatus {
     }
 
-    public static final int SUCCESS_STRING = 79;
-    public static final int SUCCESS_INPUT_STREAM = 80;
-    public static final int FAIL = 81;
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({SUCCESS_STRING, SUCCESS_INPUT_STREAM, FAIL})
-    public @interface ConnectResult {
-    }
-
-    protected ZConnectHandler zConnectHandler;
-
-
     public ZBaseConnect(Context context) {
         this.context = context;
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(context);
-        okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
-                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
-                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
-                .build();
+
     }
 
 
@@ -109,11 +90,6 @@ public class ZBaseConnect {
      */
     public void setConnectTimeOut(int connectTimeOut) {
         this.connectTimeOut = connectTimeOut;
-        okHttpClient = okHttpClient.newBuilder()
-                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
-                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
-                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
-                .build();
     }
 
     //------------------
@@ -123,11 +99,6 @@ public class ZBaseConnect {
      */
     public void setWriteTimeOut(int writeTimeOut) {
         this.writeTimeOut = writeTimeOut;
-        okHttpClient = okHttpClient.newBuilder()
-                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
-                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
-                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
-                .build();
     }
     //----------------
 
@@ -136,11 +107,6 @@ public class ZBaseConnect {
      */
     public void setReadTimeOut(int readTimeOut) {
         this.readTimeOut = readTimeOut;
-        okHttpClient = okHttpClient.newBuilder()
-                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
-                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
-                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
-                .build();
     }
 
     //------------------
@@ -169,44 +135,6 @@ public class ZBaseConnect {
         }
     }
 
-    //----------------
-
-    /***
-     * 傳遞 連線結果  成功  inputstream
-     */
-    protected void success(InputStream inputStream, int statusCode) {
-        Message message = Message.obtain();
-        message.what = SUCCESS_INPUT_STREAM;
-        message.obj = inputStream;
-        message.arg1 = statusCode;
-        handler.sendMessage(message);
-    }
-
-    //---------------
-
-
-    /***
-     * 傳遞 連線結果  成功  inputstream
-     */
-    protected void success(String string, int statusCode) {
-        Message message = Message.obtain();
-        message.what = SUCCESS_STRING;
-        message.obj = string;
-        message.arg1 = statusCode;
-        handler.sendMessage(message);
-    }
-
-
-    //----------------
-
-    /***
-     * 傳遞 連線結果 失敗
-     */
-    protected void fail() {
-        Message message = Message.obtain();
-        message.what = FAIL;
-        handler.sendMessage(message);
-    }
 
     //-----------------
 
@@ -223,18 +151,6 @@ public class ZBaseConnect {
                 //dismiss loading dialog
                 case DISMISS_DIALOG:
                     zLoadingDialog.dismiss();
-                    break;
-                //連線成功 String
-                case SUCCESS_STRING:
-                    zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
-                    break;
-                //連線成功 inputstream
-                case SUCCESS_INPUT_STREAM:
-                    zConnectHandler.OnInputStreamResponse((InputStream) msg.obj, msg.arg1);
-                    break;
-                //連線失敗
-                case FAIL:
-                    zConnectHandler.OnFail();
                     break;
             }
 

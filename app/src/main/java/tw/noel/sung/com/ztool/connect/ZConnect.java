@@ -11,12 +11,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -30,7 +32,7 @@ import tw.noel.sung.com.ztool.connect.util.implement.ZConnectHandler;
 /**
  * Created by noel on 2019/1/21.
  */
-public class ZConnect extends ZBaseConnect implements Callback {
+public class ZConnect extends ZBaseConnect {
 
     public ZConnect(Context context) {
         super(context);
@@ -46,19 +48,16 @@ public class ZConnect extends ZBaseConnect implements Callback {
      * @param apiURL url
      * @param zConnectHandler callback
      */
-    public void get(String apiURL, ZConnectHandler zConnectHandler) {
+    public void get(String apiURL,  ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectHandler = zConnectHandler;
-        displayLoadingDialog(SHOW_DIALOG);
         request = new Request.Builder()
                 .url(apiURL)
                 .get()
                 .build();
-        okHttpClient.newCall(request).enqueue(this);
-
+        startConnect(request,zConnectHandler);
     }
 
     //---------------
@@ -79,9 +78,6 @@ public class ZConnect extends ZBaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectHandler = zConnectHandler;
-        displayLoadingDialog(SHOW_DIALOG);
-
         Request.Builder builder = new Request.Builder()
                 .url(apiURL)
                 .get();
@@ -91,8 +87,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
         }
 
         request = builder.build();
-        okHttpClient.newCall(request).enqueue(this);
-
+        startConnect(request,zConnectHandler);
     }
 
 
@@ -115,9 +110,6 @@ public class ZConnect extends ZBaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectHandler = zConnectHandler;
-        displayLoadingDialog(SHOW_DIALOG);
-
         Request.Builder builder = new Request.Builder()
                 .url(apiURL);
 
@@ -134,13 +126,9 @@ public class ZConnect extends ZBaseConnect implements Callback {
                 formBodyBuilder.add(key, params.get(key));
             }
         }
-
-
         requestBody = formBodyBuilder.build();
         request = builder.post(requestBody).build();
-
-        okHttpClient.newCall(request).enqueue(this);
-
+        startConnect(request,zConnectHandler);
     }
 
 
@@ -162,10 +150,6 @@ public class ZConnect extends ZBaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectHandler = zConnectHandler;
-
-        displayLoadingDialog(SHOW_DIALOG);
-
         Request.Builder builder = new Request.Builder()
                 .url(apiURL);
 
@@ -177,7 +161,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
 
         requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
         request = builder.post(requestBody).build();
-        okHttpClient.newCall(request).enqueue(this);
+        startConnect(request,zConnectHandler);
     }
 
 
@@ -203,10 +187,6 @@ public class ZConnect extends ZBaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectHandler = zConnectHandler;
-
-        displayLoadingDialog(SHOW_DIALOG);
-
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart(fileKey, fileName, RequestBody.create(MediaType.parse(fileType), file));
@@ -227,8 +207,7 @@ public class ZConnect extends ZBaseConnect implements Callback {
         }
 
         request = requestBuilder.build();
-        okHttpClient.newCall(request).enqueue(this);
-
+        startConnect(request,zConnectHandler);
     }
 
     //----------------------
@@ -254,10 +233,6 @@ public class ZConnect extends ZBaseConnect implements Callback {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
         }
-        this.zConnectHandler = zConnectHandler;
-
-        displayLoadingDialog(SHOW_DIALOG);
-
 
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -277,51 +252,52 @@ public class ZConnect extends ZBaseConnect implements Callback {
             }
         }
         request = requestBuilder.build();
-        okHttpClient.newCall(request).enqueue(this);
+        startConnect(request,zConnectHandler);
     }
 
 
-    //-----------------
+    //-----------
 
     /***
-     * 連線失敗
-     * @param call
-     * @param e
+     * 進行連線
+     * @param request
      */
-    @Override
-    public void onFailure(Call call, IOException e) {
-        displayLoadingDialog(DISMISS_DIALOG);
-        fail();
-    }
+    private void startConnect(Request request, final ZConnectHandler zConnectHandler) {
+        displayLoadingDialog(SHOW_DIALOG);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .build();
 
-    //----------
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                displayLoadingDialog(DISMISS_DIALOG);
+                zConnectHandler.OnFail();
+            }
 
-    /***
-     * 連線成功
-     * @param call
-     * @param response
-     */
-    @Override
-    public void onResponse(Call call, Response response) {
-        displayLoadingDialog(DISMISS_DIALOG);
+            @Override
+            public void onResponse(Call call, Response response)  {
+                displayLoadingDialog(DISMISS_DIALOG);
+
+                try {
+                    ResponseBody responseBody = response.body();
+                    BufferedSource source = responseBody.source();
+                    source.request(Long.MAX_VALUE);
+                    Buffer buffer = source.buffer();
 
 
-        try {
-            ResponseBody responseBody = response.body();
-            BufferedSource source = responseBody.source();
-            source.request(Long.MAX_VALUE);
-            Buffer buffer = source.buffer();
-
-
-            String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
-            InputStream responseBodyInputStream = buffer.clone().inputStream();
-            int code = response.code();
-
-            success(responseBodyString, code);
-            success(new BufferedInputStream(responseBodyInputStream,1024), code);
-            source.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
+                    InputStream responseBodyInputStream = buffer.clone().inputStream();
+                    int code = response.code();
+                    zConnectHandler.OnStringResponse(responseBodyString, code);
+                    zConnectHandler.OnInputStreamResponse((new BufferedInputStream(responseBodyInputStream, 1024)), code);
+                    source.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
