@@ -12,19 +12,14 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 
 import com.google.gson.Gson;
-
-import java.io.InputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import tw.noel.sung.com.ztool.connect.util.dialog.ZLoadingDialog;
-import tw.noel.sung.com.ztool.connect.util.implement.ZConnectHandler;
-
 /**
  * Created by noel on 2019/1/21.
  */
@@ -43,7 +38,7 @@ public class ZBaseConnect {
     public @interface uploadFileType {
     }
 
-
+    protected OkHttpClient okHttpClient;
     private final int DEFAULT_TIME_OUT = 15 * 1000;
     protected int connectTimeOut = DEFAULT_TIME_OUT;
     protected int writeTimeOut = DEFAULT_TIME_OUT;
@@ -67,6 +62,11 @@ public class ZBaseConnect {
 
     public ZBaseConnect(Context context) {
         this.context = context;
+        okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .build();
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(context);
 
@@ -82,7 +82,6 @@ public class ZBaseConnect {
         zLoadingDialog = dialog;
     }
 
-
     //------------------
 
     /***
@@ -90,6 +89,7 @@ public class ZBaseConnect {
      */
     public void setConnectTimeOut(int connectTimeOut) {
         this.connectTimeOut = connectTimeOut;
+        newClient();
     }
 
     //------------------
@@ -99,6 +99,7 @@ public class ZBaseConnect {
      */
     public void setWriteTimeOut(int writeTimeOut) {
         this.writeTimeOut = writeTimeOut;
+        newClient();
     }
     //----------------
 
@@ -107,6 +108,7 @@ public class ZBaseConnect {
      */
     public void setReadTimeOut(int readTimeOut) {
         this.readTimeOut = readTimeOut;
+        newClient();
     }
 
     //------------------
@@ -120,42 +122,17 @@ public class ZBaseConnect {
         return networkInfo != null && networkInfo.isAvailable();
     }
 
-
-    //----------------
+    //------------------
 
     /***
-     *  顯示/隱藏 loading dialog
-     * @param status
+     * 再次建立client
+     * @return
      */
-    protected void displayLoadingDialog(@LoadingDialogStatus int status) {
-        if (zLoadingDialog != null) {
-            Message message = Message.obtain();
-            message.what = status;
-            handler.sendMessage(message);
-        }
+    private void newClient() {
+        okHttpClient = okHttpClient.newBuilder()
+                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .build();
     }
-
-
-    //-----------------
-
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            int type = msg.what;
-            switch (type) {
-                //show loading dialog
-                case SHOW_DIALOG:
-                    zLoadingDialog.show();
-                    break;
-                //dismiss loading dialog
-                case DISMISS_DIALOG:
-                    zLoadingDialog.dismiss();
-                    break;
-            }
-
-        }
-    };
-
-    //----------------
 }

@@ -1,24 +1,20 @@
 package tw.noel.sung.com.ztool.connect;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -48,7 +44,7 @@ public class ZConnect extends ZBaseConnect {
      * @param apiURL url
      * @param zConnectHandler callback
      */
-    public void get(String apiURL,  ZConnectHandler zConnectHandler) {
+    public void get(String apiURL, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -57,7 +53,7 @@ public class ZConnect extends ZBaseConnect {
                 .url(apiURL)
                 .get()
                 .build();
-        startConnect(request,zConnectHandler);
+        startConnect(request, zConnectHandler);
     }
 
     //---------------
@@ -87,7 +83,7 @@ public class ZConnect extends ZBaseConnect {
         }
 
         request = builder.build();
-        startConnect(request,zConnectHandler);
+        startConnect(request, zConnectHandler);
     }
 
 
@@ -128,7 +124,7 @@ public class ZConnect extends ZBaseConnect {
         }
         requestBody = formBodyBuilder.build();
         request = builder.post(requestBody).build();
-        startConnect(request,zConnectHandler);
+        startConnect(request, zConnectHandler);
     }
 
 
@@ -161,7 +157,7 @@ public class ZConnect extends ZBaseConnect {
 
         requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
         request = builder.post(requestBody).build();
-        startConnect(request,zConnectHandler);
+        startConnect(request, zConnectHandler);
     }
 
 
@@ -207,7 +203,7 @@ public class ZConnect extends ZBaseConnect {
         }
 
         request = requestBuilder.build();
-        startConnect(request,zConnectHandler);
+        startConnect(request, zConnectHandler);
     }
 
     //----------------------
@@ -252,7 +248,7 @@ public class ZConnect extends ZBaseConnect {
             }
         }
         request = requestBuilder.build();
-        startConnect(request,zConnectHandler);
+        startConnect(request, zConnectHandler);
     }
 
 
@@ -262,42 +258,73 @@ public class ZConnect extends ZBaseConnect {
      * 進行連線
      * @param request
      */
-    private void startConnect(Request request, final ZConnectHandler zConnectHandler) {
-        displayLoadingDialog(SHOW_DIALOG);
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
-                .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
-                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
-                .build();
+    private void startConnect(final Request request, final ZConnectHandler zConnectHandler) {
 
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        @SuppressLint("HandlerLeak") final Handler handler = new Handler() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                displayLoadingDialog(DISMISS_DIALOG);
-                zConnectHandler.OnFail();
-            }
+            public void handleMessage(Message msg) {
+                int type = msg.what;
+                if (zLoadingDialog != null) {
+                    switch (type) {
+                        //show loading dialog
+                        case SHOW_DIALOG:
+                            zLoadingDialog.show();
+                            break;
+                        //dismiss loading dialog
+                        case DISMISS_DIALOG:
 
-            @Override
-            public void onResponse(Call call, Response response)  {
-                displayLoadingDialog(DISMISS_DIALOG);
-
-                try {
-                    ResponseBody responseBody = response.body();
-                    BufferedSource source = responseBody.source();
-                    source.request(Long.MAX_VALUE);
-                    Buffer buffer = source.buffer();
-
-
-                    String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
-                    InputStream responseBodyInputStream = buffer.clone().inputStream();
-                    int code = response.code();
-                    zConnectHandler.OnStringResponse(responseBodyString, code);
-                    zConnectHandler.OnInputStreamResponse((new BufferedInputStream(responseBodyInputStream, 1024)), code);
-                    source.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                            //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
+                            if (okHttpClient.dispatcher().runningCallsCount() == 0) {
+                                zLoadingDialog.dismiss();
+                            }
+                            break;
+                    }
                 }
             }
-        });
+        };
+
+        displayLoadingDialog(SHOW_DIALOG, handler);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response =  okHttpClient.newCall(request).execute();
+                    if(response.isSuccessful()){
+                        displayLoadingDialog(DISMISS_DIALOG, handler);
+
+                        ResponseBody responseBody = response.body();
+                        BufferedSource source = responseBody.source();
+                        source.request(Long.MAX_VALUE);
+                        Buffer buffer = source.buffer();
+
+
+                        String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
+                        InputStream responseBodyInputStream = buffer.clone().inputStream();
+                        int code = response.code();
+                        zConnectHandler.OnStringResponse(responseBodyString, code);
+                        zConnectHandler.OnInputStreamResponse((new BufferedInputStream(responseBodyInputStream, 1024)), code);
+                        source.close();
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    displayLoadingDialog(DISMISS_DIALOG, handler);
+                    zConnectHandler.OnFail(e);
+                }
+            }
+        }).start();
+    }
+
+
+    //----------------
+
+    /***
+     *  顯示/隱藏 loading dialog
+     * @param status
+     */
+    private void displayLoadingDialog(@LoadingDialogStatus int status, Handler handler) {
+        Message message = Message.obtain();
+        message.what = status;
+        handler.sendMessage(message);
     }
 }

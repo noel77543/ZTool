@@ -25,5 +25,4 @@ public class ZLoadingDialog extends Dialog {
         setCancelable(false);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
-
 }

@@ -3,6 +3,7 @@ package tw.noel.sung.com.ztool.connect.util.implement;
 /**
  * Created by noel on 2019/1/21.
  */
+import java.io.IOException;
 import java.io.InputStream;
 
 public class ZConnectHandler {
@@ -33,7 +34,7 @@ public class ZConnectHandler {
     /***
      *  連線失敗接口
      */
-    public void OnFail() {
+    public void OnFail(IOException e) {
 
     }
 
