@@ -12,14 +12,17 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 
 import com.google.gson.Gson;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import tw.noel.sung.com.ztool.connect.util.dialog.ZLoadingDialog;
+
 /**
  * Created by noel on 2019/1/21.
  */
@@ -59,6 +62,15 @@ public class ZBaseConnect {
     @IntDef({SHOW_DIALOG, DISMISS_DIALOG})
     public @interface LoadingDialogStatus {
     }
+
+    public static final int SUCCESS_STRING = 80;
+    public static final int SUCCESS_INPUTSTREAM = 81;
+    public static final int FAIL = 82;
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SUCCESS_STRING, SUCCESS_INPUTSTREAM,FAIL})
+    public @interface ConnectResponse {
+    }
+
 
     public ZBaseConnect(Context context) {
         this.context = context;

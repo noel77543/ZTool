@@ -6,12 +6,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
+
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -278,6 +280,15 @@ public class ZConnect extends ZBaseConnect {
                                 zLoadingDialog.dismiss();
                             }
                             break;
+                        case SUCCESS_INPUTSTREAM:
+                            zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
+                            break;
+                        case SUCCESS_STRING:
+                            zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
+                            break;
+                        case FAIL:
+                            zConnectHandler.OnFail((IOException) msg.obj);
+                            break;
                     }
                 }
             }
@@ -288,8 +299,8 @@ public class ZConnect extends ZBaseConnect {
             @Override
             public void run() {
                 try {
-                    Response response =  okHttpClient.newCall(request).execute();
-                    if(response.isSuccessful()){
+                    Response response = okHttpClient.newCall(request).execute();
+                    if (response.isSuccessful()) {
                         displayLoadingDialog(DISMISS_DIALOG, handler);
 
                         ResponseBody responseBody = response.body();
@@ -301,15 +312,15 @@ public class ZConnect extends ZBaseConnect {
                         String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
                         InputStream responseBodyInputStream = buffer.clone().inputStream();
                         int code = response.code();
-                        zConnectHandler.OnStringResponse(responseBodyString, code);
-                        zConnectHandler.OnInputStreamResponse((new BufferedInputStream(responseBodyInputStream, 1024)), code);
-                        source.close();
 
+                        displayResponse(SUCCESS_STRING, responseBodyString, code, handler);
+                        displayResponse(SUCCESS_INPUTSTREAM, responseBodyInputStream, code, handler);
+                        source.close();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     displayLoadingDialog(DISMISS_DIALOG, handler);
-                    zConnectHandler.OnFail(e);
+                    displayResponse(FAIL, e, 0, handler);
                 }
             }
         }).start();
@@ -327,4 +338,20 @@ public class ZConnect extends ZBaseConnect {
         message.what = status;
         handler.sendMessage(message);
     }
+    //----------------
+
+    /***
+     * 事件回傳
+     * @param type
+     * @param object
+     * @param handler
+     */
+    private void displayResponse(@ConnectResponse int type, Object object, int statusCode, Handler handler) {
+        Message message = Message.obtain();
+        message.what = type;
+        message.obj = object;
+        message.arg1 = statusCode;
+        handler.sendMessage(message);
+    }
+
 }
