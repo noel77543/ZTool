@@ -28,7 +28,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Gson
-    implementation 'com.google.code.gson:gson:2.+'
+    implementation 'com.google.code.gson:gson:2.8.+'
     //okHttp
     implementation 'com.squareup.okhttp3:okhttp:3.11.+'
+    //location
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+//    //map
+//    implementation 'com.google.maps.android:android-maps-utils:0.4.+'
+    //place
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
 }

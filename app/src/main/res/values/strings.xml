@@ -5,4 +5,7 @@
     <string name="z_connect_net_work_not_work">請確認網路狀態後，再試一次。</string>
     <!--ZFileTool-->
     <string name="z_file_util_file_not_found">檔案不存在。</string>
+
+
+
 </resources>

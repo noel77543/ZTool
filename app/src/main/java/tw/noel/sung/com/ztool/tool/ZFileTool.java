@@ -96,8 +96,7 @@ public class ZFileTool {
     public String getAssetsFileToString(String fileName) {
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(context.getAssets().open(fileName), "UTF-8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open(fileName), "UTF-8"));
 
             String line;
             while ((line = reader.readLine()) != null) {

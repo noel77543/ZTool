@@ -95,9 +95,11 @@ public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
         int innerRadius = radius / 5;
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor(INNER_CIRCLE_COLOR));
-        canvas.drawCircle(radius, (int) (innerRadius * 1.5), innerRadius, paint);
-        canvas.drawCircle(radius * 2 - innerRadius * 2, innerRadius * 7, innerRadius, paint);
-        canvas.drawCircle(innerRadius * 2, innerRadius * 7, innerRadius, paint);
+
+        canvas.drawCircle(radius/2+innerRadius,radius/2+ innerRadius, innerRadius, paint);
+        canvas.drawCircle(radius/2+innerRadius, radius/2+radius-innerRadius, innerRadius, paint);
+        canvas.drawCircle(radius/2+radius-innerRadius, radius/2+radius-innerRadius, innerRadius, paint);
+        canvas.drawCircle(radius/2+radius-innerRadius,radius/2+ innerRadius, innerRadius, paint);
     }
 
     //-----------
@@ -118,8 +120,8 @@ public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
      */
     private void startRotateAnimation() {
 
-        Animation animation = new RotateAnimation(0, 360,  Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setDuration(1000);
+        Animation animation = new RotateAnimation(0, 1080, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(1200);
         animation.setInterpolator(new AccelerateDecelerateInterpolator());
         animation.setRepeatCount(Animation.INFINITE);
         startAnimation(animation);
