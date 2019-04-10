@@ -125,7 +125,7 @@ public class ZLocationTool implements GoogleApiClient.ConnectionCallbacks, Googl
     /***
      *  移除經位度取得工具
      */
-    private void clear() {
+    public void clear() {
         if (locationRequest != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
             locationRequest = null;
