@@ -6,19 +6,12 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0.3"
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        //正式版
         release {
-            //程式碼混淆
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        //測試版
-        debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
