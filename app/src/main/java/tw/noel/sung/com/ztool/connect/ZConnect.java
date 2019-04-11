@@ -321,6 +321,7 @@ public class ZConnect extends ZBaseConnect {
                         displayResponse(SUCCESS_INPUTSTREAM, responseBodyInputStream, code, handler);
                         source.close();
                     } else {
+                        displayLoadingDialog(DISMISS_DIALOG, handler);
                         displayResponse(FAIL, null, code, handler);
                     }
                 } catch (IOException e) {
