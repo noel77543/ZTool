@@ -287,8 +287,8 @@ public class ZConnect extends ZBaseConnect {
                             zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
                             break;
                         case FAIL:
-                            if (msg.obj instanceof Integer) {
-                                zConnectHandler.OnFail((int) msg.obj);
+                            if (msg.obj == null) {
+                                zConnectHandler.OnFail(msg.arg1);
                             } else {
                                 zConnectHandler.OnFail((IOException) msg.obj);
                             }
