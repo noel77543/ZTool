@@ -38,4 +38,11 @@ public class ZConnectHandler {
 
     }
 
+    //----------
+    /***
+     *  連線成功但回覆失敗接口
+     */
+    public void OnFail(int code){
+
+    }
 }

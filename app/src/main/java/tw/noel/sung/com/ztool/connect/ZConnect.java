@@ -287,7 +287,11 @@ public class ZConnect extends ZBaseConnect {
                             zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
                             break;
                         case FAIL:
-                            zConnectHandler.OnFail((IOException) msg.obj);
+                            if (msg.obj instanceof Integer) {
+                                zConnectHandler.OnFail((int) msg.obj);
+                            } else {
+                                zConnectHandler.OnFail((IOException) msg.obj);
+                            }
                             break;
                     }
                 }
@@ -300,6 +304,7 @@ public class ZConnect extends ZBaseConnect {
             public void run() {
                 try {
                     Response response = okHttpClient.newCall(request).execute();
+                    int code = response.code();
                     if (response.isSuccessful()) {
                         displayLoadingDialog(DISMISS_DIALOG, handler);
 
@@ -311,11 +316,12 @@ public class ZConnect extends ZBaseConnect {
 
                         String responseBodyString = buffer.clone().readString(Charset.forName("UTF-8"));
                         InputStream responseBodyInputStream = buffer.clone().inputStream();
-                        int code = response.code();
 
                         displayResponse(SUCCESS_STRING, responseBodyString, code, handler);
                         displayResponse(SUCCESS_INPUTSTREAM, responseBodyInputStream, code, handler);
-//                        source.close();
+                        source.close();
+                    } else {
+                        displayResponse(FAIL, null, code, handler);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
