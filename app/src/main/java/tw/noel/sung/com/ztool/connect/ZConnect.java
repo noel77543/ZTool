@@ -315,7 +315,7 @@ public class ZConnect extends ZBaseConnect {
 
                         displayResponse(SUCCESS_STRING, responseBodyString, code, handler);
                         displayResponse(SUCCESS_INPUTSTREAM, responseBodyInputStream, code, handler);
-                        source.close();
+//                        source.close();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
