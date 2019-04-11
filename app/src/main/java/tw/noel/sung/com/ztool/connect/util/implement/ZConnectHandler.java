@@ -3,6 +3,7 @@ package tw.noel.sung.com.ztool.connect.util.implement;
 /**
  * Created by noel on 2019/1/21.
  */
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,7 +17,7 @@ public class ZConnectHandler {
      * @param inputStream
      * @param code
      */
-    public void OnInputStreamResponse(InputStream inputStream,int code) {
+    public void OnInputStreamResponse(InputStream inputStream, int code) {
 
     }
     //-----------
@@ -26,7 +27,7 @@ public class ZConnectHandler {
      * @param response
      * @param code
      */
-    public void OnStringResponse(String response,int code) {
+    public void OnStringResponse(String response, int code) {
 
     }
     //-----------
@@ -39,10 +40,11 @@ public class ZConnectHandler {
     }
 
     //----------
+
     /***
      *  連線成功但回覆失敗接口
      */
-    public void OnFail(int code){
+    public void OnFail(String response, int code) {
 
     }
 }

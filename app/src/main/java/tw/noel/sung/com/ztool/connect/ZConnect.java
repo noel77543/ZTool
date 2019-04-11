@@ -287,8 +287,8 @@ public class ZConnect extends ZBaseConnect {
                             zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
                             break;
                         case FAIL:
-                            if (msg.obj == null) {
-                                zConnectHandler.OnFail(msg.arg1);
+                            if (msg.obj instanceof String) {
+                                zConnectHandler.OnFail((String) msg.obj, msg.arg1);
                             } else {
                                 zConnectHandler.OnFail((IOException) msg.obj);
                             }
@@ -322,7 +322,7 @@ public class ZConnect extends ZBaseConnect {
                         source.close();
                     } else {
                         displayLoadingDialog(DISMISS_DIALOG, handler);
-                        displayResponse(FAIL, null, code, handler);
+                        displayResponse(FAIL, response.body().string(), code, handler);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
