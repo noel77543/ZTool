@@ -1,4 +1,4 @@
-package tw.noel.sung.com.ztool.tool.google_map.location;
+package tw.noel.sung.com.ztool.tool.sensor.location;
 
 import android.Manifest;
 import android.content.Context;
@@ -19,9 +19,12 @@ import com.google.android.gms.maps.model.Polyline;
 
 import java.util.List;
 
-import tw.noel.sung.com.ztool.tool.google_map.location.implement.OnLocationChangeListener;
-import tw.noel.sung.com.ztool.tool.google_map.location.implement.OnLocationGetListener;
+import tw.noel.sung.com.ztool.tool.sensor.location.callback.OnLocationChangeListener;
+import tw.noel.sung.com.ztool.tool.sensor.location.callback.OnLocationGetListener;
 
+/**
+ * Created by noel on 2019/3/26.
+ */
 public class ZLocationTool implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     // Google API用戶端物件

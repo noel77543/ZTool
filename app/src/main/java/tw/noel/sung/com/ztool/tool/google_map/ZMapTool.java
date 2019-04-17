@@ -1,4 +1,4 @@
-package tw.noel.sung.com.ztool.tool.google_map.map;
+package tw.noel.sung.com.ztool.tool.google_map;
 
 import android.content.Context;
 import android.util.Log;

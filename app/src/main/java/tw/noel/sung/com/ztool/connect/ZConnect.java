@@ -25,7 +25,7 @@ import okio.Buffer;
 import okio.BufferedSource;
 import tw.noel.sung.com.ztool.R;
 import tw.noel.sung.com.ztool.connect.util.base.ZBaseConnect;
-import tw.noel.sung.com.ztool.connect.util.implement.ZConnectHandler;
+import tw.noel.sung.com.ztool.connect.util.callback.ZConnectHandler;
 
 /**
  * Created by noel on 2019/1/21.
