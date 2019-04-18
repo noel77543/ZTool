@@ -14,8 +14,10 @@ import java.security.InvalidKeyException;
 import java.util.concurrent.Executor;
 
 import tw.noel.sung.com.ztool.R;
-import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.ZBiometricPromptHandler;
-import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.ZFingerprintManagerHandler;
+import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.sign.ZBiometricPromptSignHandler;
+import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.sign.ZFingerprintManagerSignHandler;
+import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.verify.ZBiometricPromptVerifyHandler;
+import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.verify.ZFingerprintManagerVerifyHandler;
 
 
 /**
@@ -51,15 +53,15 @@ public class ZBiometricTool {
     //--------
 
     /***
-     * 進行辨識
+     * 進行註冊
      *  android api 23 - 27 之間
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void startScanFinger(final ZFingerprintManagerHandler zFingerprintManagerHandler) {
+    public void startSignFingerManagerFingerPrint(final ZFingerprintManagerSignHandler zFingerprintManagerSignHandler) {
         try {
             if (biometricHelper.isCanFingerPrint()) {
                 fingerprintManager = (FingerprintManager) context.getSystemService(Activity.FINGERPRINT_SERVICE);
-                fingerprintManager.authenticate(keyHelper.getFingerprintManagerCompatCryptoObject(), cancellationSignal, 0, zFingerprintManagerHandler.setKeyHelper(keyHelper), null);
+                fingerprintManager.authenticate(keyHelper.getFingerprintManagerCompatCryptoObject(), cancellationSignal, 0, zFingerprintManagerSignHandler.setKeyHelper(keyHelper), null);
             } else {
                 Toast.makeText(context, context.getString(R.string.not_finger_print), Toast.LENGTH_SHORT).show();
             }
@@ -68,14 +70,36 @@ public class ZBiometricTool {
         }
     }
 
-    //----------
+
+    //--------
 
     /***
      * 進行辨識
+     *  android api 23 - 27 之間
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void startVerifyFingerManagerFingerPrint(final ZFingerprintManagerVerifyHandler zFingerprintManagerVerifyHandler) {
+        try {
+            if (biometricHelper.isCanFingerPrint()) {
+                fingerprintManager = (FingerprintManager) context.getSystemService(Activity.FINGERPRINT_SERVICE);
+                fingerprintManager.authenticate(keyHelper.getFingerprintManagerCompatCryptoObject(), cancellationSignal, 0, zFingerprintManagerVerifyHandler, null);
+            } else {
+                Toast.makeText(context, context.getString(R.string.not_finger_print), Toast.LENGTH_SHORT).show();
+            }
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //----------
+
+    /***
+     * 進行註冊
      *  android api 28 以上
      */
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void startScanFinger(final ZBiometricPromptHandler zBiometricPromptHandler) {
+    public void startSignBioMetricFingerPrint(final ZBiometricPromptSignHandler zBiometricPromptSignHandler) {
 
         try {
             if (biometricHelper.isCanBioMetricAuthentication()) {
@@ -86,11 +110,45 @@ public class ZBiometricTool {
                         .setNegativeButton(context.getString(R.string.cancel), executor, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                zBiometricPromptHandler.onCancelScan();
+                                zBiometricPromptSignHandler.onCancelScan();
                             }
                         })
                         .build();
-                biometricPrompt.authenticate(keyHelper.getBiometricPromptCryptoObject(), cancellationSignal, executor, zBiometricPromptHandler.setKeyHelper(keyHelper));
+                biometricPrompt.authenticate(keyHelper.getBiometricPromptCryptoObject(), cancellationSignal, executor, zBiometricPromptSignHandler.setKeyHelper(keyHelper));
+
+
+            } else {
+                Toast.makeText(context, context.getString(R.string.not_finger_print), Toast.LENGTH_SHORT).show();
+            }
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //----------
+
+    /***
+     * 進行辨識
+     *  android api 28 以上
+     */
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public void startVerifyBioMetricFingerPrint(final ZBiometricPromptVerifyHandler zBiometricPromptVerifyHandler) {
+
+        try {
+            if (biometricHelper.isCanBioMetricAuthentication()) {
+                executor = context.getMainExecutor();
+                biometricPrompt = new BiometricPrompt.Builder(context)
+                        .setTitle(context.getString(R.string.finger_print))
+                        .setDescription(context.getString(R.string.finger_print_description))
+                        .setNegativeButton(context.getString(R.string.cancel), executor, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                zBiometricPromptVerifyHandler.onCancelScan();
+                            }
+                        })
+                        .build();
+                biometricPrompt.authenticate(keyHelper.getBiometricPromptCryptoObject(), cancellationSignal, executor, zBiometricPromptVerifyHandler);
 
 
             } else {
