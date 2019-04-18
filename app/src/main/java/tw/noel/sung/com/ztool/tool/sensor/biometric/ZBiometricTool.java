@@ -14,10 +14,8 @@ import java.security.InvalidKeyException;
 import java.util.concurrent.Executor;
 
 import tw.noel.sung.com.ztool.R;
-import tw.noel.sung.com.ztool.tool.sensor.biometric.util.BiometricHelper;
-import tw.noel.sung.com.ztool.tool.sensor.biometric.util.KeyHelper;
-import tw.noel.sung.com.ztool.tool.sensor.biometric.util.callback.ZBiometricPromptHandler;
-import tw.noel.sung.com.ztool.tool.sensor.biometric.util.callback.ZFingerprintManagerHandler;
+import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.ZBiometricPromptHandler;
+import tw.noel.sung.com.ztool.tool.sensor.biometric.callback.ZFingerprintManagerHandler;
 
 
 /**
@@ -61,7 +59,7 @@ public class ZBiometricTool {
         try {
             if (biometricHelper.isCanFingerPrint()) {
                 fingerprintManager = (FingerprintManager) context.getSystemService(Activity.FINGERPRINT_SERVICE);
-                fingerprintManager.authenticate(keyHelper.getFingerprintManagerCompatCryptoObject(), cancellationSignal, 0, zFingerprintManagerHandler.setPublicKey(keyHelper.getPublicKey()), null);
+                fingerprintManager.authenticate(keyHelper.getFingerprintManagerCompatCryptoObject(), cancellationSignal, 0, zFingerprintManagerHandler.setKeyHelper(keyHelper), null);
             } else {
                 Toast.makeText(context, context.getString(R.string.not_finger_print), Toast.LENGTH_SHORT).show();
             }
@@ -82,8 +80,7 @@ public class ZBiometricTool {
         try {
             if (biometricHelper.isCanBioMetricAuthentication()) {
                 executor = context.getMainExecutor();
-                biometricPrompt = new BiometricPrompt
-                        .Builder(context)
+                biometricPrompt = new BiometricPrompt.Builder(context)
                         .setTitle(context.getString(R.string.finger_print))
                         .setDescription(context.getString(R.string.finger_print_description))
                         .setNegativeButton(context.getString(R.string.cancel), executor, new DialogInterface.OnClickListener() {
@@ -93,7 +90,7 @@ public class ZBiometricTool {
                             }
                         })
                         .build();
-                biometricPrompt.authenticate(keyHelper.getBiometricPromptCryptoObject(), cancellationSignal, executor, zBiometricPromptHandler.setPublicKey(keyHelper.getPublicKey()));
+                biometricPrompt.authenticate(keyHelper.getBiometricPromptCryptoObject(), cancellationSignal, executor, zBiometricPromptHandler.setKeyHelper(keyHelper));
 
 
             } else {
@@ -103,13 +100,13 @@ public class ZBiometricTool {
             e.printStackTrace();
         }
     }
-
-    //-------------------
+    //------------------
 
     /***
-     * 停止掃描
+     *  TODO 如果上傳LockString & KeyString時失敗則需移除鑰匙串
+     * 清除鑰匙串
      */
-    public void stopScan(){
-        cancellationSignal.cancel();
+    public void removeKey(){
+        keyHelper.removeKey();
     }
 }

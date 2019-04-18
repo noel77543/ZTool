@@ -1,4 +1,4 @@
-package tw.noel.sung.com.ztool.tool.sensor.biometric.util;
+package tw.noel.sung.com.ztool.tool.sensor.biometric;
 
 import android.hardware.biometrics.BiometricPrompt;
 import android.hardware.fingerprint.FingerprintManager;
