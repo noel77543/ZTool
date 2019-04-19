@@ -10,7 +10,7 @@ import tw.noel.sung.com.ztool.tool.sensor.biometric.KeyHelper;
 /**
  * Created by noel on 2019/4/16.
  */
-@RequiresApi(api = Build.VERSION_CODES.O)
+@RequiresApi(api = Build.VERSION_CODES.P)
 public abstract class ZBiometricPromptSignHandler extends BiometricPrompt.AuthenticationCallback {
 
     private KeyHelper keyHelper;

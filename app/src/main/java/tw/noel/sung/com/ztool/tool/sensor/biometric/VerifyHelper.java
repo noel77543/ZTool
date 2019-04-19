@@ -41,6 +41,7 @@ public class VerifyHelper {
      *   android api 28 up
      * 以公鑰進行解密
      */
+    @RequiresApi(api = Build.VERSION_CODES.P)
     public boolean verifyCryptoObject(BiometricPrompt.CryptoObject cryptoObject, byte[] signByteArray, PublicKey publicKey) {
         try {
             Signature signature = cryptoObject.getSignature();

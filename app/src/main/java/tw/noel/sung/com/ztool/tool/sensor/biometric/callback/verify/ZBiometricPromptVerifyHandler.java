@@ -15,7 +15,7 @@ import tw.noel.sung.com.ztool.tool.sensor.biometric.VerifyHelper;
 /**
  * Created by noel on 2019/4/16.
  */
-@RequiresApi(api = Build.VERSION_CODES.O)
+@RequiresApi(api = Build.VERSION_CODES.P)
 public class ZBiometricPromptVerifyHandler extends BiometricPrompt.AuthenticationCallback {
     private String keyString;
     private String lockString;

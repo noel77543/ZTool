@@ -60,6 +60,7 @@ public class ZBiometricTool {
     public void startSignFingerManagerFingerPrint(final ZFingerprintManagerSignHandler zFingerprintManagerSignHandler) {
         try {
             if (biometricHelper.isCanFingerPrint()) {
+                removeKey();
                 fingerprintManager = (FingerprintManager) context.getSystemService(Activity.FINGERPRINT_SERVICE);
                 fingerprintManager.authenticate(keyHelper.getFingerprintManagerCompatCryptoObject(), cancellationSignal, 0, zFingerprintManagerSignHandler.setKeyHelper(keyHelper), null);
             } else {
@@ -103,6 +104,7 @@ public class ZBiometricTool {
 
         try {
             if (biometricHelper.isCanBioMetricAuthentication()) {
+                removeKey();
                 executor = context.getMainExecutor();
                 biometricPrompt = new BiometricPrompt.Builder(context)
                         .setTitle(context.getString(R.string.finger_print))
