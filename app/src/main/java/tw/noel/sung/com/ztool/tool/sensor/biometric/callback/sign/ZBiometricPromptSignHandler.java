@@ -11,7 +11,7 @@ import tw.noel.sung.com.ztool.tool.sensor.biometric.KeyHelper;
  * Created by noel on 2019/4/16.
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class ZBiometricPromptSignHandler extends BiometricPrompt.AuthenticationCallback {
+public abstract class ZBiometricPromptSignHandler extends BiometricPrompt.AuthenticationCallback {
 
     private KeyHelper keyHelper;
 
@@ -38,18 +38,14 @@ public class ZBiometricPromptSignHandler extends BiometricPrompt.AuthenticationC
     /***
      *  當註冊指紋 取得keyString 用於解密
      */
-    public void onSignedFingerPrint(String lockString, String keyString) {
-
-    }
+    public abstract void onSignedFingerPrint(String lockString, String keyString) ;
 
     //-------------------
 
     /***
      * 當取消
      */
-    public void onCancelScan() {
-
-    }
+    public abstract void onCancelScan() ;
     //-------------------
 
     @Override
