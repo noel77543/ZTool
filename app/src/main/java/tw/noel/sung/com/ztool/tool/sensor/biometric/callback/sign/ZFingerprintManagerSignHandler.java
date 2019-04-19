@@ -13,7 +13,7 @@ import tw.noel.sung.com.ztool.tool.sensor.biometric.KeyHelper;
  */
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class ZFingerprintManagerSignHandler extends FingerprintManager.AuthenticationCallback{
+public abstract class ZFingerprintManagerSignHandler extends FingerprintManager.AuthenticationCallback{
 
     private KeyHelper keyHelper;
 
@@ -41,18 +41,14 @@ public class ZFingerprintManagerSignHandler extends FingerprintManager.Authentic
     /***
      *  當註冊指紋 取得keyString 用於解密
      */
-    public void onSignedFingerPrint(String lockString, String keyString) {
-
-    }
+    public abstract void onSignedFingerPrint(String lockString, String keyString) ;
 
 
     //-------------------
     /***
      * 當取消
      */
-    public void onCancelScan(){
-
-    }
+    public abstract void onCancelScan();
     //-----------
 
     @Override
