@@ -103,7 +103,7 @@ public class ZConnect extends ZBaseConnect {
      * @param params keyValue 參數
      * @param zConnectHandler callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, ZConnectHandler zConnectHandler) {
+    public void post(String apiURL,  Map<String, String> headers,  Map<String, String> params, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -143,7 +143,7 @@ public class ZConnect extends ZBaseConnect {
      * @param requestModel  json object model
      * @param zConnectHandler callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, Object requestModel, ZConnectHandler zConnectHandler) {
+    public void post(String apiURL, Map<String, String> headers, Object requestModel, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -180,7 +180,7 @@ public class ZConnect extends ZBaseConnect {
      * @param fileType 檔案類型 參考 @uploadFileType
      * @param zConnectHandler callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
+    public void post(String apiURL,  Map<String, String> headers,  Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -226,7 +226,7 @@ public class ZConnect extends ZBaseConnect {
      * @param fileType        檔案類型 參考 @uploadFileType
      * @param zConnectHandler callback
      */
-    public void post(String apiURL, @Nullable Map<String, String> headers, @Nullable Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
+    public void post(String apiURL,  Map<String, String> headers, Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
