@@ -43,6 +43,7 @@ public class ZBiometricPromptVerifyHandler extends BiometricPrompt.Authenticatio
 
         } catch (Exception e) {
             e.printStackTrace();
+            onVerifiedFingerPrint(false);
         }
     }
 

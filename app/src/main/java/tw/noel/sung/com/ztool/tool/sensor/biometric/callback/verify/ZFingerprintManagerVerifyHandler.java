@@ -42,6 +42,7 @@ public class ZFingerprintManagerVerifyHandler extends FingerprintManager.Authent
             onVerifiedFingerPrint(verifyHelper.verifyCryptoObject(cryptoObject, Base64.decode(lockString, Base64.DEFAULT), key));
         } catch (Exception e) {
             e.printStackTrace();
+            onVerifiedFingerPrint(false);
         }
     }
     //----------------------
