@@ -45,7 +45,7 @@ public class ZBiometricTool {
     public ZBiometricTool(Context context,String keyName) {
         this.context = context;
 
-        keyHelper = new KeyHelper(context,keyName);
+        keyHelper = new KeyHelper(keyName);
         biometricHelper = new BiometricHelper(context);
         cancellationSignal = new CancellationSignal();
     }

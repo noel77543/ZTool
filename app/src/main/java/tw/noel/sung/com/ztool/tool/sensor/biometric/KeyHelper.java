@@ -31,7 +31,7 @@ import java.security.spec.ECGenParameterSpec;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class KeyHelper {
 
-    
+
     //    private static final String KEYSTORE_NAME = "AndroidKeyStore";
     private final static String KEY_NAME = KeyHelper.class.getSimpleName();
     /***
