@@ -42,10 +42,10 @@ public class ZBiometricTool {
     private BiometricHelper biometricHelper;
     private KeyHelper keyHelper;
 
-    public ZBiometricTool(Context context) {
+    public ZBiometricTool(Context context,String keyName) {
         this.context = context;
 
-        keyHelper = new KeyHelper(context);
+        keyHelper = new KeyHelper(context,keyName);
         biometricHelper = new BiometricHelper(context);
         cancellationSignal = new CancellationSignal();
     }

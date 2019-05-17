@@ -31,8 +31,8 @@ import java.security.spec.ECGenParameterSpec;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class KeyHelper {
 
-    private static final String KEYSTORE_NAME = "AndroidKeyStore";
-    private final static String KEY_NAME =KeyHelper.class.getSimpleName();
+    //    private static final String KEYSTORE_NAME = "AndroidKeyStore";
+    private final static String KEY_NAME = KeyHelper.class.getSimpleName();
     /***
      *  與後台交互需要進行非對稱加密
      *  即創建一處成雙成對的公鑰、私鑰
@@ -42,16 +42,15 @@ public class KeyHelper {
     private KeyPairGenerator keyPairGenerator;
     //成對的鑰匙 公鑰、私鑰
     private KeyPair keyPair;
-    private Context context;
     private Signature signature;
+    private String keyName;
 
-
-    public KeyHelper(Context context) {
-        this.context = context;
+    public KeyHelper(String keyName) {
+        this.keyName = keyName;
         try {
             signature = Signature.getInstance("SHA256withECDSA");
-            keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, KEYSTORE_NAME);
-            keyStore = KeyStore.getInstance(KEYSTORE_NAME);
+            keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, keyName);
+            keyStore = KeyStore.getInstance(keyName);
 
             //如定義的KeyName不存在則創建一個
             if (!isKeyPairCreated()) {
@@ -94,7 +93,7 @@ public class KeyHelper {
      */
     public void removeKey() {
         try {
-            keyStore.deleteEntry(KEYSTORE_NAME);
+            keyStore.deleteEntry(keyName);
         } catch (KeyStoreException e) {
             e.printStackTrace();
         }
