@@ -17,6 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -66,8 +67,9 @@ public class ZBaseConnect {
     public static final int SUCCESS_STRING = 80;
     public static final int SUCCESS_INPUTSTREAM = 81;
     public static final int FAIL = 82;
+
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({SUCCESS_STRING, SUCCESS_INPUTSTREAM,FAIL})
+    @IntDef({SUCCESS_STRING, SUCCESS_INPUTSTREAM, FAIL})
     public @interface ConnectResponse {
     }
 
@@ -121,6 +123,18 @@ public class ZBaseConnect {
     public void setReadTimeOut(int readTimeOut) {
         this.readTimeOut = readTimeOut;
         newClient();
+    }
+
+    //-----------------
+
+    /***
+     * 加入攔截器
+     */
+    public void setInterceptor(Interceptor... interceptors) {
+        for (Interceptor interceptor : interceptors) {
+            okHttpClient.interceptors().add(interceptor);
+
+        }
     }
 
     //------------------
