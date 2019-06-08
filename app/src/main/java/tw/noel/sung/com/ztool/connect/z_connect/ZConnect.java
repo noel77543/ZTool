@@ -1,10 +1,9 @@
-package tw.noel.sung.com.ztool.connect;
+package tw.noel.sung.com.ztool.connect.z_connect;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
@@ -24,17 +23,19 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import tw.noel.sung.com.ztool.R;
-import tw.noel.sung.com.ztool.connect.util.base.ZBaseConnect;
-import tw.noel.sung.com.ztool.connect.util.callback.ZConnectHandler;
+import tw.noel.sung.com.ztool.connect.z_connect.util.base.ZBaseConnect;
+import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
 
 /**
  * Created by noel on 2019/1/21.
  */
 public class ZConnect extends ZBaseConnect {
 
+
     public ZConnect(Context context) {
         super(context);
     }
+
 
 
     //---------------
@@ -103,7 +104,7 @@ public class ZConnect extends ZBaseConnect {
      * @param params keyValue 參數
      * @param zConnectHandler callback
      */
-    public void post(String apiURL,  Map<String, String> headers,  Map<String, String> params, ZConnectHandler zConnectHandler) {
+    public void post(String apiURL, Map<String, String> headers, Map<String, String> params, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -180,7 +181,7 @@ public class ZConnect extends ZBaseConnect {
      * @param fileType 檔案類型 參考 @uploadFileType
      * @param zConnectHandler callback
      */
-    public void post(String apiURL,  Map<String, String> headers,  Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
+    public void post(String apiURL, Map<String, String> headers, Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;
@@ -226,7 +227,7 @@ public class ZConnect extends ZBaseConnect {
      * @param fileType        檔案類型 參考 @uploadFileType
      * @param zConnectHandler callback
      */
-    public void post(String apiURL,  Map<String, String> headers, Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
+    public void post(String apiURL, Map<String, String> headers, Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
         if (!isNetWorkable()) {
             Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
             return;

@@ -1,12 +1,9 @@
-package tw.noel.sung.com.ztool.connect.util.base;
+package tw.noel.sung.com.ztool.connect.z_connect.util.base;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
@@ -22,7 +19,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import tw.noel.sung.com.ztool.connect.util.dialog.ZLoadingDialog;
+import tw.noel.sung.com.ztool.connect.z_connect.util.dialog.ZLoadingDialog;
 
 /**
  * Created by noel on 2019/1/21.

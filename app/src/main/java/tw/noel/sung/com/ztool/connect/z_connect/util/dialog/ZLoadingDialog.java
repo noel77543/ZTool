@@ -1,4 +1,4 @@
-package tw.noel.sung.com.ztool.connect.util.dialog;
+package tw.noel.sung.com.ztool.connect.z_connect.util.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.LinearLayout;
 
-import tw.noel.sung.com.ztool.connect.util.views.ZLoadingView;
+import tw.noel.sung.com.ztool.connect.z_connect.util.views.ZLoadingView;
 
 /**
  * Created by noel on 2019/1/21.
