@@ -1,6 +1,8 @@
 package tw.noel.sung.com.ztool.tool;
 
 
+import android.util.Patterns;
+
 import java.util.regex.Pattern;
 
 import static android.util.Patterns.EMAIL_ADDRESS;
@@ -9,7 +11,6 @@ import static android.util.Patterns.EMAIL_ADDRESS;
  * Created by noel on 2019/3/10.
  */
 public class ZCheckFormatTool {
-
 
 
     //-------
@@ -36,8 +37,8 @@ public class ZCheckFormatTool {
      * 是否是浮點數
      * 可指定小數點後 afterPointStart 至 afterPointEnd位
      */
-    public boolean isFloat(String text, int afterPointStart,int afterPointEnd) {
-        return Pattern.compile("^[0-9]+(.[0-9]{"+afterPointStart+","+afterPointEnd+"})?+$").matcher(text).matches();
+    public boolean isFloat(String text, int afterPointStart, int afterPointEnd) {
+        return Pattern.compile("^[0-9]+(.[0-9]{" + afterPointStart + "," + afterPointEnd + "})?+$").matcher(text).matches();
     }
     //-------
 
@@ -93,4 +94,14 @@ public class ZCheckFormatTool {
     public boolean isEmail(String text) {
         return EMAIL_ADDRESS.matcher(text).matches();
     }
+
+    //-----------
+
+    /***
+     *  是否為手機格式
+     */
+    public boolean isCellPhone(String text) {
+        return Patterns.PHONE.matcher(text).matches();
+    }
+
 }
