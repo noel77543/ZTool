@@ -25,8 +25,8 @@ import tw.noel.sung.com.ztool.connect.z_update_checker.util.ZUpdateHandler;
 public class ZUpdateChecker extends ZConnect {
 
     private final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id={0}";
-    private final String currentVersion_PatternSeq = "<div[^>]*?>Current\\sVersion</div><span[^>]*?>(.*?)><div[^>]*?>(.*?)><span[^>]*?>(.*?)</span>";
-    private final String appVersion_PatternSeq = "htlgb\">([^<]*)</s";
+    private final String PATTERN_CURRENT_VERSION = "<div[^>]*?>Current\\sVersion</div><span[^>]*?>(.*?)><div[^>]*?>(.*?)><span[^>]*?>(.*?)</span>";
+    private final String PATTERN_APP_VERSION_NAME = "htlgb\">([^<]*)</s";
 
     public ZUpdateChecker(Context context) {
         super(context);
@@ -78,11 +78,10 @@ public class ZUpdateChecker extends ZConnect {
     private String getLatestVersionName(String htmlString) {
 
         String latestVersionName = "";
-        String versionString = parseHtml(currentVersion_PatternSeq, htmlString);
+        String versionString = parseHtml(PATTERN_CURRENT_VERSION, htmlString);
 
-        Log.e("TTT", versionString);
         if (versionString != null) {
-            latestVersionName = parseHtml(appVersion_PatternSeq, versionString);
+            latestVersionName = parseHtml(PATTERN_APP_VERSION_NAME, versionString);
         }
         return latestVersionName;
     }
