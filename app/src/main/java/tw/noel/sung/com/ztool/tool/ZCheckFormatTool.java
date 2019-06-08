@@ -99,9 +99,11 @@ public class ZCheckFormatTool {
 
     /***
      *  是否為手機格式
+     *   e.g    1.   +886xxxxxxxxxx
+     *           2.   09xxxxxxxx
      */
     public boolean isCellPhone(String text) {
-        return Patterns.PHONE.matcher(text).matches();
+        return Pattern.compile("[+-]?\\d{10,12}").matcher(text).matches();
     }
 
 }
