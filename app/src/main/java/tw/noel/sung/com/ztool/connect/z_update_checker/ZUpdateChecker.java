@@ -25,70 +25,13 @@ import tw.noel.sung.com.ztool.connect.z_update_checker.util.ZUpdateHandler;
 public class ZUpdateChecker extends ZConnect {
 
     private final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id={0}";
-
-    private XmlPullParserFactory xmlPullParserFactory;
-    private XmlPullParser xmlPullParser;
+    private final String currentVersion_PatternSeq = "<div[^>]*?>Current\\sVersion</div><span[^>]*?>(.*?)><div[^>]*?>(.*?)><span[^>]*?>(.*?)</span>";
+    private final String appVersion_PatternSeq = "htlgb\">([^<]*)</s";
 
     public ZUpdateChecker(Context context) {
         super(context);
 
-        try {
-            xmlPullParserFactory = XmlPullParserFactory.newInstance();
-            xmlPullParser = xmlPullParserFactory.newPullParser();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
     }
-
-
-
-
-
-    private String getPlayStoreAppVersion(String xml) {
-        final String currentVersion_PatternSeq = "<div[^>]*?>Current\\sVersion</div><span[^>]*?>(.*?)><div[^>]*?>(.*?)><span[^>]*?>(.*?)</span>";
-        final String appVersion_PatternSeq = "htlgb\">([^<]*)</s";
-        String playStoreAppVersion ;
-
-        // Get the current version pattern sequence
-        String versionString = getAppVersion (currentVersion_PatternSeq, xml.toString());
-        if(null == versionString){
-            return null;
-        }else{
-            // get version from "htlgb">X.X.X</span>
-            playStoreAppVersion = getAppVersion (appVersion_PatternSeq, versionString);
-        }
-
-        return playStoreAppVersion;
-    }
-
-
-
-    private String getAppVersion(String patternString, String inputString) {
-        try{
-            //Create a pattern
-            Pattern pattern = Pattern.compile(patternString);
-            if (null == pattern) {
-                return null;
-            }
-
-            //Match the pattern string in provided string
-            Matcher matcher = pattern.matcher(inputString);
-            if (null != matcher && matcher.find()) {
-                return matcher.group(1);
-            }
-
-        }catch (PatternSyntaxException ex) {
-
-            ex.printStackTrace();
-        }
-
-        return null;
-    }
-
-
-
-
-
 
     //-----------------
 
@@ -102,8 +45,7 @@ public class ZUpdateChecker extends ZConnect {
             public void OnStringResponse(String response, int code) {
                 super.OnStringResponse(response, code);
 
-
-                String latestVersionName = getPlayStoreAppVersion(response);
+                String latestVersionName = getLatestVersionName(response);
                 if (latestVersionName.equals("")) {
                     zUpdateHandler.OnFail(response, code);
                 } else {
@@ -125,46 +67,49 @@ public class ZUpdateChecker extends ZConnect {
         });
     }
 
+
     //-----------------
 
     /***
-     *  解析XML 取得VersionName
+     *  取得VersionName
+     * @param htmlString
      * @return
      */
-    private String getLatestVersionName(String xml) {
+    private String getLatestVersionName(String htmlString) {
+
         String latestVersionName = "";
+        String versionString = parseHtml(currentVersion_PatternSeq, htmlString);
+
+        Log.e("TTT", versionString);
+        if (versionString != null) {
+            latestVersionName = parseHtml(appVersion_PatternSeq, versionString);
+        }
+        return latestVersionName;
+    }
+
+    //-----------------
+
+    /***
+     *  解析Html
+     * @param patternString
+     * @param htmlString
+     * @return
+     */
+    private String parseHtml(String patternString, String htmlString) {
         try {
-            xmlPullParser.setInput(new StringReader(xml));
-            int eventType = xmlPullParser.getEventType();
-
-            //直到節點為文件結束點
-            while (eventType != xmlPullParser.END_DOCUMENT) {
-
-                String tagName = xmlPullParser.getName();
-                switch (eventType) {
-                    //節點開始
-                    case XmlPullParser.START_TAG:
-                        if(tagName != null){
-
-                            if(tagName.equals("htlgb")){
-                                Log.e("TTT",xmlPullParser.getText());
-                            }
-                        }
-                    break;
-                    //節點結束
-                    case XmlPullParser.END_TAG:
-
-
-                    break;
-                }
-                //下一個節點
-                eventType = xmlPullParser.next();
+            Pattern pattern = Pattern.compile(patternString);
+            if (null == pattern) {
+                return null;
             }
 
-        } catch (IOException | XmlPullParserException e) {
-            e.printStackTrace();
-        }
+            Matcher matcher = pattern.matcher(htmlString);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
 
-        return latestVersionName;
+        } catch (PatternSyntaxException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }
