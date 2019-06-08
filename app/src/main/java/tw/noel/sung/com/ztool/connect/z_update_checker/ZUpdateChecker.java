@@ -7,9 +7,16 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import tw.noel.sung.com.ztool.connect.z_connect.ZConnect;
 import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
@@ -33,6 +40,56 @@ public class ZUpdateChecker extends ZConnect {
         }
     }
 
+
+
+
+
+    private String getPlayStoreAppVersion(String xml) {
+        final String currentVersion_PatternSeq = "<div[^>]*?>Current\\sVersion</div><span[^>]*?>(.*?)><div[^>]*?>(.*?)><span[^>]*?>(.*?)</span>";
+        final String appVersion_PatternSeq = "htlgb\">([^<]*)</s";
+        String playStoreAppVersion ;
+
+        // Get the current version pattern sequence
+        String versionString = getAppVersion (currentVersion_PatternSeq, xml.toString());
+        if(null == versionString){
+            return null;
+        }else{
+            // get version from "htlgb">X.X.X</span>
+            playStoreAppVersion = getAppVersion (appVersion_PatternSeq, versionString);
+        }
+
+        return playStoreAppVersion;
+    }
+
+
+
+    private String getAppVersion(String patternString, String inputString) {
+        try{
+            //Create a pattern
+            Pattern pattern = Pattern.compile(patternString);
+            if (null == pattern) {
+                return null;
+            }
+
+            //Match the pattern string in provided string
+            Matcher matcher = pattern.matcher(inputString);
+            if (null != matcher && matcher.find()) {
+                return matcher.group(1);
+            }
+
+        }catch (PatternSyntaxException ex) {
+
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
+
+
+
     //-----------------
 
     /***
@@ -46,7 +103,7 @@ public class ZUpdateChecker extends ZConnect {
                 super.OnStringResponse(response, code);
 
 
-                String latestVersionName = getLatestVersionName(response);
+                String latestVersionName = getPlayStoreAppVersion(response);
                 if (latestVersionName.equals("")) {
                     zUpdateHandler.OnFail(response, code);
                 } else {
