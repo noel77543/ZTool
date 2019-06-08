@@ -44,7 +44,7 @@ public class ZUpdateChecker extends ZConnect {
             @Override
             public void OnStringResponse(String response, int code) {
                 super.OnStringResponse(response, code);
-                Log.e("TTT",response);
+
 
                 String latestVersionName = getLatestVersionName(response);
                 if (latestVersionName.equals("")) {
@@ -82,13 +82,17 @@ public class ZUpdateChecker extends ZConnect {
 
             //直到節點為文件結束點
             while (eventType != xmlPullParser.END_DOCUMENT) {
-                String nodeName = xmlPullParser.getName();
 
+                String tagName = xmlPullParser.getName();
                 switch (eventType) {
                     //節點開始
                     case XmlPullParser.START_TAG:
+                        if(tagName != null){
 
-
+                            if(tagName.equals("htlgb")){
+                                Log.e("TTT",xmlPullParser.getText());
+                            }
+                        }
                     break;
                     //節點結束
                     case XmlPullParser.END_TAG:
