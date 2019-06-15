@@ -1,4 +1,4 @@
-package tw.noel.sung.com.ztool.tool.sensor.location.callback;
+package tw.noel.sung.com.ztool.tool.sensor.location.implement;
 
 import android.location.Location;
 

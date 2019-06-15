@@ -19,8 +19,8 @@ import com.google.android.gms.maps.model.Polyline;
 
 import java.util.List;
 
-import tw.noel.sung.com.ztool.tool.sensor.location.callback.OnLocationChangeListener;
-import tw.noel.sung.com.ztool.tool.sensor.location.callback.OnLocationGetListener;
+import tw.noel.sung.com.ztool.tool.sensor.location.implement.OnLocationChangeListener;
+import tw.noel.sung.com.ztool.tool.sensor.location.implement.OnLocationGetListener;
 
 /**
  * Created by noel on 2019/3/26.
