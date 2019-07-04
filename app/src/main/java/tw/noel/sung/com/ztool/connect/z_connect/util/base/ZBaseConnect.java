@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -47,7 +48,7 @@ public class ZBaseConnect {
     protected Request request;
     protected Gson gson;
     protected RequestBody requestBody;
-    protected Context context;
+    protected WeakReference<Context> context;
 
     protected Dialog zLoadingDialog;
 
@@ -72,14 +73,14 @@ public class ZBaseConnect {
 
 
     public ZBaseConnect(Context context) {
-        this.context = context;
+        this.context = new WeakReference<Context>(context);
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
                 .build();
         gson = new Gson();
-        zLoadingDialog = new ZLoadingDialog(context);
+        zLoadingDialog = new ZLoadingDialog(this.context.get());
 
     }
 
@@ -140,7 +141,7 @@ public class ZBaseConnect {
      * 確認網路功能可用
      */
     protected boolean isNetWorkable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.get().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isAvailable();
     }

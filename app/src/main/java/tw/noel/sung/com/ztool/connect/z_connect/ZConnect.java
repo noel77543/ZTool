@@ -37,7 +37,6 @@ public class ZConnect extends ZBaseConnect {
     }
 
 
-
     //---------------
 
     /***
@@ -48,15 +47,19 @@ public class ZConnect extends ZBaseConnect {
      * @param zConnectHandler callback
      */
     public void get(String apiURL, ZConnectHandler zConnectHandler) {
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
+        Context context = this.context.get();
+        if (context != null) {
+            if (!isNetWorkable()) {
+                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            request = new Request.Builder()
+                    .url(apiURL)
+                    .get()
+                    .build();
+            startConnect(context,request, zConnectHandler);
         }
-        request = new Request.Builder()
-                .url(apiURL)
-                .get()
-                .build();
-        startConnect(request, zConnectHandler);
+
     }
 
     //---------------
@@ -72,21 +75,23 @@ public class ZConnect extends ZBaseConnect {
      * @param zConnectHandler callback
      */
     public void get(String apiURL, Map<String, String> headers, ZConnectHandler zConnectHandler) {
+        Context context = this.context.get();
+        if (context != null) {
+            if (!isNetWorkable()) {
+                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Request.Builder builder = new Request.Builder()
+                    .url(apiURL)
+                    .get();
 
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
+            for (String key : headers.keySet()) {
+                builder.addHeader(key, headers.get(key));
+            }
+
+            request = builder.build();
+            startConnect(context,request, zConnectHandler);
         }
-        Request.Builder builder = new Request.Builder()
-                .url(apiURL)
-                .get();
-
-        for (String key : headers.keySet()) {
-            builder.addHeader(key, headers.get(key));
-        }
-
-        request = builder.build();
-        startConnect(request, zConnectHandler);
     }
 
 
@@ -105,29 +110,32 @@ public class ZConnect extends ZBaseConnect {
      * @param zConnectHandler callback
      */
     public void post(String apiURL, Map<String, String> headers, Map<String, String> params, ZConnectHandler zConnectHandler) {
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Request.Builder builder = new Request.Builder()
-                .url(apiURL);
-
-        if (headers != null) {
-            for (String key : headers.keySet()) {
-                builder.addHeader(key, headers.get(key));
+        Context context = this.context.get();
+        if (context != null) {
+            if (!isNetWorkable()) {
+                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                return;
             }
-        }
+            Request.Builder builder = new Request.Builder()
+                    .url(apiURL);
 
-
-        FormBody.Builder formBodyBuilder = new FormBody.Builder();
-        if (params != null) {
-            for (String key : params.keySet()) {
-                formBodyBuilder.add(key, params.get(key));
+            if (headers != null) {
+                for (String key : headers.keySet()) {
+                    builder.addHeader(key, headers.get(key));
+                }
             }
+
+
+            FormBody.Builder formBodyBuilder = new FormBody.Builder();
+            if (params != null) {
+                for (String key : params.keySet()) {
+                    formBodyBuilder.add(key, params.get(key));
+                }
+            }
+            requestBody = formBodyBuilder.build();
+            request = builder.post(requestBody).build();
+            startConnect(context,request, zConnectHandler);
         }
-        requestBody = formBodyBuilder.build();
-        request = builder.post(requestBody).build();
-        startConnect(request, zConnectHandler);
     }
 
 
@@ -145,22 +153,26 @@ public class ZConnect extends ZBaseConnect {
      * @param zConnectHandler callback
      */
     public void post(String apiURL, Map<String, String> headers, Object requestModel, ZConnectHandler zConnectHandler) {
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Request.Builder builder = new Request.Builder()
-                .url(apiURL);
 
-        if (headers != null) {
-            for (String key : headers.keySet()) {
-                builder.addHeader(key, headers.get(key));
+        Context context = this.context.get();
+        if (context != null) {
+            if (!isNetWorkable()) {
+                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                return;
             }
-        }
+            Request.Builder builder = new Request.Builder()
+                    .url(apiURL);
 
-        requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
-        request = builder.post(requestBody).build();
-        startConnect(request, zConnectHandler);
+            if (headers != null) {
+                for (String key : headers.keySet()) {
+                    builder.addHeader(key, headers.get(key));
+                }
+            }
+
+            requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
+            request = builder.post(requestBody).build();
+            startConnect(context,request, zConnectHandler);
+        }
     }
 
 
@@ -182,31 +194,34 @@ public class ZConnect extends ZBaseConnect {
      * @param zConnectHandler callback
      */
     public void post(String apiURL, Map<String, String> headers, Map<String, String> params, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart(fileKey, fileName, RequestBody.create(MediaType.parse(fileType), file));
-
-        if (params != null) {
-            for (String key : params.keySet()) {
-                builder.addFormDataPart(key, params.get(key));
+        Context context = this.context.get();
+        if (context != null) {
+            if (!isNetWorkable()) {
+                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                return;
             }
-        }
+            MultipartBody.Builder builder = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(fileKey, fileName, RequestBody.create(MediaType.parse(fileType), file));
 
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(apiURL).post(builder.build());
-
-        if (headers != null) {
-            for (String key : headers.keySet()) {
-                requestBuilder.addHeader(key, headers.get(key));
+            if (params != null) {
+                for (String key : params.keySet()) {
+                    builder.addFormDataPart(key, params.get(key));
+                }
             }
-        }
 
-        request = requestBuilder.build();
-        startConnect(request, zConnectHandler);
+            Request.Builder requestBuilder = new Request.Builder()
+                    .url(apiURL).post(builder.build());
+
+            if (headers != null) {
+                for (String key : headers.keySet()) {
+                    requestBuilder.addHeader(key, headers.get(key));
+                }
+            }
+
+            request = requestBuilder.build();
+            startConnect(context,request, zConnectHandler);
+        }
     }
 
     //----------------------
@@ -228,30 +243,33 @@ public class ZConnect extends ZBaseConnect {
      * @param zConnectHandler callback
      */
     public void post(String apiURL, Map<String, String> headers, Object requestModel, String fileKey, String fileName, File file, @uploadFileType String fileType, ZConnectHandler zConnectHandler) {
-        if (!isNetWorkable()) {
-            Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart(fileKey, fileName, RequestBody.create(MediaType.parse(fileType), file));
-
-        if (requestModel != null) {
-            builder.addPart(RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel)));
-        }
-
-
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(apiURL).post(builder.build());
-
-        if (headers != null) {
-            for (String key : headers.keySet()) {
-                requestBuilder.addHeader(key, headers.get(key));
+        Context context = this.context.get();
+        if (context != null) {
+            if (!isNetWorkable()) {
+                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            MultipartBody.Builder builder = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(fileKey, fileName, RequestBody.create(MediaType.parse(fileType), file));
+
+            if (requestModel != null) {
+                builder.addPart(RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel)));
+            }
+
+
+            Request.Builder requestBuilder = new Request.Builder()
+                    .url(apiURL).post(builder.build());
+
+            if (headers != null) {
+                for (String key : headers.keySet()) {
+                    requestBuilder.addHeader(key, headers.get(key));
+                }
+            }
+            request = requestBuilder.build();
+            startConnect(context,request, zConnectHandler);
         }
-        request = requestBuilder.build();
-        startConnect(request, zConnectHandler);
     }
 
 
@@ -261,39 +279,41 @@ public class ZConnect extends ZBaseConnect {
      * 進行連線
      * @param request
      */
-    private void startConnect(final Request request, final ZConnectHandler zConnectHandler) {
+    private void startConnect(final Context context, final Request request, final ZConnectHandler zConnectHandler) {
 
         @SuppressLint("HandlerLeak") final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                int type = msg.what;
-                if (zLoadingDialog != null) {
-                    switch (type) {
-                        //show loading dialog
-                        case SHOW_DIALOG:
-                            zLoadingDialog.show();
-                            break;
-                        //dismiss loading dialog
-                        case DISMISS_DIALOG:
+                if(context != null){
+                    int type = msg.what;
+                    if (zLoadingDialog != null) {
+                        switch (type) {
+                            //show loading dialog
+                            case SHOW_DIALOG:
+                                zLoadingDialog.show();
+                                break;
+                            //dismiss loading dialog
+                            case DISMISS_DIALOG:
 
-                            //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
-                            if (okHttpClient.dispatcher().runningCallsCount() == 0) {
-                                zLoadingDialog.dismiss();
-                            }
-                            break;
-                        case SUCCESS_INPUTSTREAM:
-                            zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
-                            break;
-                        case SUCCESS_STRING:
-                            zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
-                            break;
-                        case FAIL:
-                            if (msg.obj instanceof String) {
-                                zConnectHandler.OnFail((String) msg.obj, msg.arg1);
-                            } else {
-                                zConnectHandler.OnFail((IOException) msg.obj);
-                            }
-                            break;
+                                //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
+                                if (okHttpClient.dispatcher().runningCallsCount() == 0) {
+                                    zLoadingDialog.dismiss();
+                                }
+                                break;
+                            case SUCCESS_INPUTSTREAM:
+                                zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
+                                break;
+                            case SUCCESS_STRING:
+                                zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
+                                break;
+                            case FAIL:
+                                if (msg.obj instanceof String) {
+                                    zConnectHandler.OnFail((String) msg.obj, msg.arg1);
+                                } else {
+                                    zConnectHandler.OnFail((IOException) msg.obj);
+                                }
+                                break;
+                        }
                     }
                 }
             }
