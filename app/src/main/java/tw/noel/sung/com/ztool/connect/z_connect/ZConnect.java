@@ -315,6 +315,8 @@ public class ZConnect extends ZBaseConnect {
                                 break;
                         }
                     }
+                }else {
+                    throw new NullPointerException("Context 不存在");
                 }
             }
         };
