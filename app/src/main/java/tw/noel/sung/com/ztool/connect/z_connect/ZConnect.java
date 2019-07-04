@@ -57,7 +57,9 @@ public class ZConnect extends ZBaseConnect {
                     .url(apiURL)
                     .get()
                     .build();
-            startConnect(context,request, zConnectHandler);
+            startConnect(request, zConnectHandler);
+        } else {
+            throw new NullPointerException("Context 不存在");
         }
 
     }
@@ -90,7 +92,9 @@ public class ZConnect extends ZBaseConnect {
             }
 
             request = builder.build();
-            startConnect(context,request, zConnectHandler);
+            startConnect(request, zConnectHandler);
+        } else {
+            throw new NullPointerException("Context 不存在");
         }
     }
 
@@ -134,7 +138,9 @@ public class ZConnect extends ZBaseConnect {
             }
             requestBody = formBodyBuilder.build();
             request = builder.post(requestBody).build();
-            startConnect(context,request, zConnectHandler);
+            startConnect(request, zConnectHandler);
+        } else {
+            throw new NullPointerException("Context 不存在");
         }
     }
 
@@ -171,7 +177,9 @@ public class ZConnect extends ZBaseConnect {
 
             requestBody = RequestBody.create(MEDIA_TYPE_JSON, gson.toJson(requestModel));
             request = builder.post(requestBody).build();
-            startConnect(context,request, zConnectHandler);
+            startConnect(request, zConnectHandler);
+        } else {
+            throw new NullPointerException("Context 不存在");
         }
     }
 
@@ -220,7 +228,9 @@ public class ZConnect extends ZBaseConnect {
             }
 
             request = requestBuilder.build();
-            startConnect(context,request, zConnectHandler);
+            startConnect(request, zConnectHandler);
+        } else {
+            throw new NullPointerException("Context 不存在");
         }
     }
 
@@ -268,7 +278,9 @@ public class ZConnect extends ZBaseConnect {
                 }
             }
             request = requestBuilder.build();
-            startConnect(context,request, zConnectHandler);
+            startConnect(request, zConnectHandler);
+        } else {
+            throw new NullPointerException("Context 不存在");
         }
     }
 
@@ -279,44 +291,40 @@ public class ZConnect extends ZBaseConnect {
      * 進行連線
      * @param request
      */
-    private void startConnect(final Context context, final Request request, final ZConnectHandler zConnectHandler) {
+    private void startConnect(final Request request, final ZConnectHandler zConnectHandler) {
 
         @SuppressLint("HandlerLeak") final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                if(context != null){
-                    int type = msg.what;
-                    if (zLoadingDialog != null) {
-                        switch (type) {
-                            //show loading dialog
-                            case SHOW_DIALOG:
-                                zLoadingDialog.show();
-                                break;
-                            //dismiss loading dialog
-                            case DISMISS_DIALOG:
+                int type = msg.what;
+                if (zLoadingDialog != null) {
+                    switch (type) {
+                        //show loading dialog
+                        case SHOW_DIALOG:
+                            zLoadingDialog.show();
+                            break;
+                        //dismiss loading dialog
+                        case DISMISS_DIALOG:
 
-                                //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
-                                if (okHttpClient.dispatcher().runningCallsCount() == 0) {
-                                    zLoadingDialog.dismiss();
-                                }
-                                break;
-                            case SUCCESS_INPUTSTREAM:
-                                zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
-                                break;
-                            case SUCCESS_STRING:
-                                zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
-                                break;
-                            case FAIL:
-                                if (msg.obj instanceof String) {
-                                    zConnectHandler.OnFail((String) msg.obj, msg.arg1);
-                                } else {
-                                    zConnectHandler.OnFail((IOException) msg.obj);
-                                }
-                                break;
-                        }
+                            //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
+                            if (okHttpClient.dispatcher().runningCallsCount() == 0) {
+                                zLoadingDialog.dismiss();
+                            }
+                            break;
+                        case SUCCESS_INPUTSTREAM:
+                            zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
+                            break;
+                        case SUCCESS_STRING:
+                            zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
+                            break;
+                        case FAIL:
+                            if (msg.obj instanceof String) {
+                                zConnectHandler.OnFail((String) msg.obj, msg.arg1);
+                            } else {
+                                zConnectHandler.OnFail((IOException) msg.obj);
+                            }
+                            break;
                     }
-                }else {
-                    throw new NullPointerException("Context 不存在");
                 }
             }
         };
