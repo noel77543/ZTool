@@ -26,18 +26,18 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Gson
-    implementation 'com.google.code.gson:gson:2.8.+'
+    api 'com.google.code.gson:gson:2.8.+'
     //okHttp
-    implementation 'com.squareup.okhttp3:okhttp:3.11.+'
+    api 'com.squareup.okhttp3:okhttp:3.11.+'
     //location
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    api 'com.google.android.gms:play-services-location:16.0.0'
     //map
-    implementation 'com.google.maps.android:android-maps-utils:0.4.+'
+    api 'com.google.maps.android:android-maps-utils:0.4.+'
     //place
-    implementation 'com.google.android.gms:play-services-places:16.1.0'
+    api 'com.google.android.gms:play-services-places:16.1.0'
     //RxPermissions
-    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    api 'com.github.tbruyelle:rxpermissions:0.10.2'
     //RxAndroid
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
 }
