@@ -2,6 +2,7 @@ package tw.noel.sung.com.ztool.connect.z_connect.util.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.widget.LinearLayout;
@@ -11,7 +12,7 @@ import tw.noel.sung.com.ztool.connect.z_connect.util.views.ZLoadingView;
 /**
  * Created by noel on 2019/1/21.
  */
-public class ZLoadingDialog extends Dialog {
+public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowListener {
 
     private LinearLayout layout;
     private ZLoadingView zLoadingView;
@@ -24,5 +25,11 @@ public class ZLoadingDialog extends Dialog {
         setContentView(layout);
         setCancelable(false);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        setOnShowListener(this);
+    }
+
+    @Override
+    public void onShow(DialogInterface dialogInterface) {
+        zLoadingView.startRotateAnimation();
     }
 }

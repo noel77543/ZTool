@@ -83,7 +83,6 @@ public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
 
         drawInnerCircle();
         drawOuterCircle();
-        startRotateAnimation();
     }
 
     //-------------------
@@ -118,7 +117,7 @@ public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
     /***
      * 設置旋轉動畫
      */
-    private void startRotateAnimation() {
+    public void startRotateAnimation() {
 
         Animation animation = new RotateAnimation(0, 1080, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(1200);
