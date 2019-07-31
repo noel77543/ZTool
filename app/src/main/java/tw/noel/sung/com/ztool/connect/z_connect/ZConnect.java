@@ -297,40 +297,41 @@ public class ZConnect extends ZBaseConnect {
             @Override
             public void handleMessage(Message msg) {
                 int type = msg.what;
-                if (zLoadingDialog != null) {
-                    switch (type) {
-                        //show loading dialog
-                        case SHOW_DIALOG:
+                switch (type) {
+                    //show loading dialog
+                    case SHOW_DIALOG:
+                        if (zLoadingDialog != null) {
                             zLoadingDialog.show();
-                            break;
-                        //dismiss loading dialog
-                        case DISMISS_DIALOG:
-
-                            //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
-                            if (okHttpClient.dispatcher().runningCallsCount() == 0) {
-                                zLoadingDialog.dismiss();
-                            }
-                            break;
-                        case SUCCESS_INPUTSTREAM:
-                            zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
-                            break;
-                        case SUCCESS_STRING:
-                            zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
-                            break;
-                        case FAIL:
-                            if (msg.obj instanceof String) {
-                                zConnectHandler.OnFail((String) msg.obj, msg.arg1);
-                            } else {
-                                zConnectHandler.OnFail((IOException) msg.obj);
-                            }
-                            break;
-                    }
+                        }
+                        break;
+                    //dismiss loading dialog
+                    case DISMISS_DIALOG:
+                        //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
+                        if (zLoadingDialog != null && okHttpClient.dispatcher().runningCallsCount() == 0) {
+                            zLoadingDialog.dismiss();
+                        }
+                        break;
+                    case SUCCESS_INPUTSTREAM:
+                        zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
+                        break;
+                    case SUCCESS_STRING:
+                        zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
+                        break;
+                    case FAIL:
+                        if (msg.obj instanceof String) {
+                            zConnectHandler.OnFail((String) msg.obj, msg.arg1);
+                        } else {
+                            zConnectHandler.OnFail((IOException) msg.obj);
+                        }
+                        break;
                 }
             }
         };
 
         displayLoadingDialog(SHOW_DIALOG, handler);
-        new Thread(new Runnable() {
+        new
+
+                Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -361,7 +362,10 @@ public class ZConnect extends ZBaseConnect {
                     displayResponse(FAIL, e, 0, handler);
                 }
             }
-        }).start();
+        }).
+
+                start();
+
     }
 
 
