@@ -106,4 +106,13 @@ public class ZCheckFormatTool {
         return Pattern.compile("[+-]?\\d{10,12}").matcher(text).matches();
     }
 
+    //------------
+
+    /***
+     *  是否為英數混合(常見密碼)
+     */
+    public boolean isPassword(String text){
+        return Pattern.compile("^[A-Za-z0-9]+$").matcher(text).matches();
+    }
+
 }
