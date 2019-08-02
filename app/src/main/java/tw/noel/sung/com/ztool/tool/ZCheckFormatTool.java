@@ -99,8 +99,8 @@ public class ZCheckFormatTool {
 
     /***
      *  是否為手機格式
-     *   e.g    1.   +886xxxxxxxxxx
-     *           2.   09xxxxxxxx
+     *   1.   +886xxxxxxxxxx
+     *   2.   09xxxxxxxx
      */
     public boolean isCellPhone(String text) {
         return Pattern.compile("[+-]?\\d{10,12}").matcher(text).matches();
@@ -110,9 +110,12 @@ public class ZCheckFormatTool {
 
     /***
      *  是否為英數混合(常見密碼)
+     *  1，不能全部是數字
+     * 2，不能全部是字母
+     * 3，必須是數字或字母
      */
     public boolean isPassword(String text){
-        return Pattern.compile("^[A-Za-z0-9]+$").matcher(text).matches();
+        return Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$").matcher(text).matches();
     }
 
 }
