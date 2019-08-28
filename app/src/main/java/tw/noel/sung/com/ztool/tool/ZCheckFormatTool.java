@@ -118,4 +118,12 @@ public class ZCheckFormatTool {
         return Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$").matcher(text).matches();
     }
 
+    //-----------
+    /***
+     *  是否為Code39格式
+     *  A-Z,0-9,+,-,.
+     */
+    public boolean isCode39(String text){
+        return Pattern.compile("^[A-Z0-9.+-]+$").matcher(text).matches();
+    }
 }
