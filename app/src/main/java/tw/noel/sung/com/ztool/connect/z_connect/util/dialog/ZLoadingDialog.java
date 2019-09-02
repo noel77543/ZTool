@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -22,6 +23,7 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
         super(context);
         layout = new LinearLayout(context);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.setGravity(Gravity.CENTER);
         zLoadingView = new ZLoadingView(context);
         layout.addView(zLoadingView);
         setContentView(layout);
