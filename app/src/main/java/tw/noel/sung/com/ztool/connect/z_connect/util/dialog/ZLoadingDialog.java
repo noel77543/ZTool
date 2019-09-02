@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import tw.noel.sung.com.ztool.connect.z_connect.util.views.ZLoadingView;
@@ -20,6 +21,7 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
     public ZLoadingDialog(Context context) {
         super(context);
         layout = new LinearLayout(context);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         zLoadingView = new ZLoadingView(context);
         layout.addView(zLoadingView);
         setContentView(layout);
