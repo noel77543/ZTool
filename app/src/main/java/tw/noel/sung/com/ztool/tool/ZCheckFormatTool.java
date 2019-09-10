@@ -1,8 +1,6 @@
 package tw.noel.sung.com.ztool.tool;
 
 
-import android.util.Patterns;
-
 import java.util.regex.Pattern;
 
 import static android.util.Patterns.EMAIL_ADDRESS;

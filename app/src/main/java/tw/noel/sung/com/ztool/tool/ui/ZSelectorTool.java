@@ -1,4 +1,4 @@
-package tw.noel.sung.com.ztool.tool;
+package tw.noel.sung.com.ztool.tool.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -78,6 +78,18 @@ public class ZSelectorTool extends StateListDrawable {
      */
     public ZSelectorTool addCheckState(Drawable drawable) {
         addState(new int[android.R.attr.state_checked], drawable);
+        return this;
+    }
+
+    //--------------
+
+
+    /***
+     *  一般狀態
+     * @param drawable
+     */
+    public ZSelectorTool addNormalState(Drawable drawable) {
+        addState(new int[]{}, drawable);
         return this;
     }
 }

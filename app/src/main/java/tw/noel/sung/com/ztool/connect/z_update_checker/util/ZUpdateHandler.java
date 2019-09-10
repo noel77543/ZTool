@@ -3,6 +3,9 @@ package tw.noel.sung.com.ztool.connect.z_update_checker.util;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Created by noel on 2019/6/5.
+ */
 public class ZUpdateHandler {
 
     /***

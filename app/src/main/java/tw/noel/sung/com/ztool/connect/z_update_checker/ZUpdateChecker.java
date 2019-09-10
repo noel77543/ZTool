@@ -22,11 +22,14 @@ import tw.noel.sung.com.ztool.connect.z_connect.ZConnect;
 import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
 import tw.noel.sung.com.ztool.connect.z_update_checker.util.ZUpdateHandler;
 
+/**
+ * Created by noel on 2019/6/5.
+ */
 public class ZUpdateChecker extends ZConnect {
 
-    private final String GOOGLE_PLAY = "https://play.google.com/store/apps/details?id={0}";
-    private final String PATTERN_CURRENT_VERSION = "<div[^>]*?>Current\\sVersion</div><span[^>]*?>(.*?)><div[^>]*?>(.*?)><span[^>]*?>(.*?)</span>";
-    private final String PATTERN_APP_VERSION_NAME = "htlgb\">([^<]*)</s";
+    private final String _GOOGLE_PLAY = "https://play.google.com/store/apps/details?id={0}";
+    private final String _PATTERN_CURRENT_VERSION = "<div[^>]*?>Current\\sVersion</div><span[^>]*?>(.*?)><div[^>]*?>(.*?)><span[^>]*?>(.*?)</span>";
+    private final String _PATTERN_APP_VERSION_NAME = "htlgb\">([^<]*)</s";
 
     public ZUpdateChecker(Context context) {
         super(context);
@@ -40,7 +43,7 @@ public class ZUpdateChecker extends ZConnect {
      * @param packageName
      */
     public void check(String packageName, final ZUpdateHandler zUpdateHandler) {
-        get(MessageFormat.format(GOOGLE_PLAY, packageName), new ZConnectHandler() {
+        get(MessageFormat.format(_GOOGLE_PLAY, packageName), new ZConnectHandler() {
             @Override
             public void OnStringResponse(String response, int code) {
                 super.OnStringResponse(response, code);
@@ -78,10 +81,10 @@ public class ZUpdateChecker extends ZConnect {
     private String getLatestVersionName(String htmlString) {
 
         String latestVersionName = "";
-        String versionString = parseHtml(PATTERN_CURRENT_VERSION, htmlString);
+        String versionString = parseHtml(_PATTERN_CURRENT_VERSION, htmlString);
 
         if (versionString != null) {
-            latestVersionName = parseHtml(PATTERN_APP_VERSION_NAME, versionString);
+            latestVersionName = parseHtml(_PATTERN_APP_VERSION_NAME, versionString);
         }
         return latestVersionName;
     }

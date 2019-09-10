@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-import tw.noel.sung.com.ztool.tool.ZFileTool;
+import tw.noel.sung.com.ztool.tool.io.ZFileTool;
 
 public class ZMapTool {
     private ZFileTool zFileTool;

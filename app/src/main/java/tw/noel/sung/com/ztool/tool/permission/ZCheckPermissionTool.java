@@ -1,8 +1,6 @@
 package tw.noel.sung.com.ztool.tool.permission;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.database.Observable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;

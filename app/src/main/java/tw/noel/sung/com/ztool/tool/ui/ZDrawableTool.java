@@ -1,4 +1,4 @@
-package tw.noel.sung.com.ztool.tool;
+package tw.noel.sung.com.ztool.tool.ui;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -9,11 +9,6 @@ import android.graphics.drawable.GradientDrawable;
 public class ZDrawableTool extends GradientDrawable {
 
     private Context context;
-
-    public ZDrawableTool(Context context, int shape) {
-        this(context);
-        setShape(shape);
-    }
 
     //---------------
 
@@ -76,4 +71,13 @@ public class ZDrawableTool extends GradientDrawable {
         return this;
     }
 
+    //----------
+
+    /***
+     *  透明度
+     */
+    public ZDrawableTool alpha(int value){
+        setAlpha(value);
+        return this;
+    }
 }
