@@ -52,9 +52,6 @@ public class ZLogTool {
                     end = messageLength;
                 }
 
-                Log.d("AAA", start + "");
-                Log.d("BBB", end + "");
-
                 logByType(logType, tag, message.substring(start, end));
             }
         }
