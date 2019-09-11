@@ -329,9 +329,7 @@ public class ZConnect extends ZBaseConnect {
         };
 
         displayLoadingDialog(SHOW_DIALOG, handler);
-        new
-
-                Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -362,9 +360,7 @@ public class ZConnect extends ZBaseConnect {
                     displayResponse(FAIL, e, 0, handler);
                 }
             }
-        }).
-
-                start();
+        }).start();
 
     }
 

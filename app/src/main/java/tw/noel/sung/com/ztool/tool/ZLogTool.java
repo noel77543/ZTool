@@ -43,16 +43,13 @@ public class ZLogTool {
             logByType(logType, tag, message);
         } else {
             //打印次數
-            int times = (int) Math.ceil(messageLength / _MAX_MESSAGE_LENGTH_OF_ONCE);
+            int times = messageLength / _MAX_MESSAGE_LENGTH_OF_ONCE;
             for (int i = 0; i <= times; i++) {
                 int start = i * _MAX_MESSAGE_LENGTH_OF_ONCE;
                 int end = start + _MAX_MESSAGE_LENGTH_OF_ONCE;
                 if (end > messageLength) {
                     end = messageLength;
                 }
-
-                Log.d("AAA", start + "");
-                Log.d("BBB", end + "");
 
                 logByType(logType, tag, message.substring(start, end));
             }
