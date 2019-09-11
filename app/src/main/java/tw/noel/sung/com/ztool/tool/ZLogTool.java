@@ -15,7 +15,7 @@ public class ZLogTool {
     /***
      *  Log最大字符數
      */
-    private static final int _MAX_MESSAGE_LENGTH_OF_ONCE = 4 * 1024;
+    private static final int _MAX_MESSAGE_LENGTH_OF_ONCE = 4000;
 
     @IntDef({V, I, E, W, D, WTF})
     @Retention(RetentionPolicy.SOURCE)
@@ -38,6 +38,7 @@ public class ZLogTool {
      */
     public static void log(@LogType int logType, String tag, String message) {
 
+        message = message.trim();
         int messageLength = message.length();
         if (messageLength < _MAX_MESSAGE_LENGTH_OF_ONCE) {
             logByType(logType, tag, message);
@@ -50,6 +51,9 @@ public class ZLogTool {
                 if (end > messageLength) {
                     end = messageLength;
                 }
+
+                Log.d("AAA", start + "");
+                Log.d("BBB", end + "");
 
                 logByType(logType, tag, message.substring(start, end));
             }
