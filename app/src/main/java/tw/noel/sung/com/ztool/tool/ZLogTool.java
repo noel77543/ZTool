@@ -13,9 +13,9 @@ public class ZLogTool {
 
 
     /***
-     *  Log底層的訊息最大字符數
+     *  Log最大字符數
      */
-    private static final int MAX_MESSAGE_LENGTH_OF_ONCE = 4 * 1024;
+    private static final int MAX_MESSAGE_LENGTH_OF_ONCE = 4000;
 
     @IntDef({V, I, E, W, D, WTF})
     @Retention(RetentionPolicy.SOURCE)
