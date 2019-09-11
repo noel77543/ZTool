@@ -50,6 +50,10 @@ public class ZLogTool {
                 if (end > messageLength) {
                     end = messageLength;
                 }
+
+                Log.d("AAA",start+"");
+                Log.d("BBB",end+"");
+                
                 logByType(logType, tag, message.substring(start, end));
             }
         }
