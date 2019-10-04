@@ -28,7 +28,7 @@ dependencies {
     //Gson
     api 'com.google.code.gson:gson:2.8.+'
     //okHttp
-    api 'com.squareup.okhttp3:okhttp:3.13.+'
+    api 'com.squareup.okhttp3:okhttp:3.11.+'
     //location
     api 'com.google.android.gms:play-services-location:17.0.0'
     //map
