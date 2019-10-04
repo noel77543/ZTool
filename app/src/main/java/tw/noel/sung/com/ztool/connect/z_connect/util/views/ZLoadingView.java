@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -17,7 +17,7 @@ import android.view.animation.RotateAnimation;
 /**
  * Created by noel on 2019/1/21.
  */
-public class ZLoadingView extends android.support.v7.widget.AppCompatImageView {
+public class ZLoadingView extends androidx.appcompat.widget.AppCompatImageView {
 
     private final String INNER_CIRCLE_COLOR = "#FFFFFF";
     private final String OUTER_CIRCLE_COLOR = "#000000";

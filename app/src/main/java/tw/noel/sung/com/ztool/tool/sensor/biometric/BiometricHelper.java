@@ -5,7 +5,7 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import android.widget.Toast;
 
 import tw.noel.sung.com.ztool.R;

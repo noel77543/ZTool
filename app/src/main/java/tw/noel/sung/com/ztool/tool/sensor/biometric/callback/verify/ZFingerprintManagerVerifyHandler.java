@@ -3,7 +3,7 @@ package tw.noel.sung.com.ztool.tool.sensor.biometric.callback.verify;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.util.Base64;
 
 import java.security.KeyFactory;

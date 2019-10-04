@@ -2,9 +2,9 @@ package tw.noel.sung.com.ztool.tool.permission;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 
 import com.tbruyelle.rxpermissions2.Permission;

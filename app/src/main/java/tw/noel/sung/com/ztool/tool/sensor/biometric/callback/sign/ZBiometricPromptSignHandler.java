@@ -2,7 +2,7 @@ package tw.noel.sung.com.ztool.tool.sensor.biometric.callback.sign;
 
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.util.Base64;
 import java.security.SignatureException;
 import tw.noel.sung.com.ztool.tool.sensor.biometric.KeyHelper;
