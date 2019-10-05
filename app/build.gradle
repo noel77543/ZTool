@@ -15,6 +15,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //支援Lamda  , okhttp 3.13 up 版本所需
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -28,7 +33,7 @@ dependencies {
     //Gson
     api 'com.google.code.gson:gson:2.8.+'
     //okHttp
-    api 'com.squareup.okhttp3:okhttp:3.11.+'
+    api 'com.squareup.okhttp3:okhttp:3.13.+'
     //location
     api 'com.google.android.gms:play-services-location:17.0.0'
     //map
