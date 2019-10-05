@@ -32,7 +32,7 @@ public class ZSelectorTool extends StateListDrawable {
      * @param drawable
      */
     public ZSelectorTool addPressState(Drawable drawable) {
-        addState(new int[android.R.attr.state_pressed], drawable);
+        addState(new int[]{android.R.attr.state_pressed}, drawable);
         return this;
     }
 
@@ -43,7 +43,7 @@ public class ZSelectorTool extends StateListDrawable {
      * @param drawable
      */
     public ZSelectorTool addFocusState(Drawable drawable) {
-        addState(new int[android.R.attr.state_focused], drawable);
+        addState(new int[]{android.R.attr.state_focused}, drawable);
         return this;
     }
 
@@ -55,7 +55,7 @@ public class ZSelectorTool extends StateListDrawable {
      * @param drawable
      */
     public ZSelectorTool addSelectState(Drawable drawable) {
-        addState(new int[android.R.attr.state_selected], drawable);
+        addState(new int[]{android.R.attr.state_selected}, drawable);
         return this;
     }
 
@@ -66,7 +66,7 @@ public class ZSelectorTool extends StateListDrawable {
      * @param drawable
      */
     public ZSelectorTool addEanbleState(Drawable drawable) {
-        addState(new int[android.R.attr.state_enabled], drawable);
+        addState(new int[]{android.R.attr.state_enabled}, drawable);
         return this;
     }
 
@@ -77,7 +77,7 @@ public class ZSelectorTool extends StateListDrawable {
      * @param drawable
      */
     public ZSelectorTool addCheckState(Drawable drawable) {
-        addState(new int[android.R.attr.state_checked], drawable);
+        addState(new int[]{android.R.attr.state_checked}, drawable);
         return this;
     }
 
