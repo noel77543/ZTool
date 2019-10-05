@@ -34,7 +34,7 @@ public class ZDrawableTool extends GradientDrawable {
      * @return
      */
     public ZDrawableTool solid(int colorRes) {
-        setColor(context.getResources().getColor(colorRes));
+        setColor(colorRes);
         return this;
     }
 
@@ -57,7 +57,7 @@ public class ZDrawableTool extends GradientDrawable {
      * 邊際線
      */
     public ZDrawableTool stroke(int width, int colorRes) {
-        setStroke(width, context.getResources().getColor(colorRes));
+        setStroke(width, colorRes);
         return this;
     }
 

@@ -60,8 +60,6 @@ public class ZMapTool {
                     for (int i = 0; i < pointArray.length; i += 3) {
                         String latStr = pointArray[i + 1];
                         String lngStr = pointArray[i];
-                        Log.e("lat", latStr);
-                        Log.e("lng", lngStr);
                         if (!latStr.isEmpty() && !lngStr.isEmpty()) {
                             points.add(new LatLng(Double.parseDouble(latStr), Double.parseDouble(lngStr)));
                         }
