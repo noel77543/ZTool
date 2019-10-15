@@ -16,7 +16,7 @@ public class ZImageTool {
 
 
     /***
-     *  取得圖片的寬高  -File
+     *  取得圖片或只取得寬高  -File
      *  size[0] = 寬
      *  size[1] = 高
      */
@@ -30,7 +30,7 @@ public class ZImageTool {
     //---------
 
     /***
-     *  取得圖片的寬高  -Resource
+     *  取得圖片或只取得寬高  -Resource
      *  size[0] = 寬
      *  size[1] = 高
      */
@@ -44,7 +44,7 @@ public class ZImageTool {
     //---------
 
     /***
-     *  取得圖片的寬高  -ByteArray
+     *  取得圖片或只取得寬高  -ByteArray
      *  size[0] = 寬
      *  size[1] = 高
      */
@@ -58,7 +58,7 @@ public class ZImageTool {
     //---------
 
     /***
-     *  取得圖片的寬高  -ByteArray
+     *  取得圖片或只取得寬高  -ByteArray
      *  size[0] = 寬
      *  size[1] = 高
      */
@@ -73,7 +73,7 @@ public class ZImageTool {
     //---------
 
     /***
-     *  取得圖片的寬高  -ByteArray
+     *  取得圖片或只取得寬高  -ByteArray
      *  size[0] = 寬
      *  size[1] = 高
      */
