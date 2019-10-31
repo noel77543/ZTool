@@ -1,6 +1,7 @@
 package tw.noel.sung.com.ztool.connect.z_update_checker;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -49,7 +50,7 @@ public class ZUpdateChecker extends ZConnect {
                 super.OnStringResponse(response, code);
 
                 String latestVersionName = getLatestVersionName(response);
-                if (latestVersionName.equals("")) {
+                if (TextUtils.isEmpty(latestVersionName)) {
                     zUpdateHandler.OnFail(response, code);
                 } else {
                     zUpdateHandler.OnChecked(latestVersionName);
