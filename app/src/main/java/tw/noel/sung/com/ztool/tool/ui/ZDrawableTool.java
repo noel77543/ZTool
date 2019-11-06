@@ -1,19 +1,30 @@
 package tw.noel.sung.com.ztool.tool.ui;
 
-import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+
+import androidx.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by noel on 2019/6/5.
  */
 public class ZDrawableTool extends GradientDrawable {
 
-    private Context context;
+    public static final int SHAPE_OVAL = GradientDrawable.OVAL;
+    public static final int SHAPE_LINE = GradientDrawable.LINE;
+    public static final int SHAPE_RECTANGLE = GradientDrawable.RECTANGLE;
+    public static final int SHAPE_RING = GradientDrawable.RING;
 
-    //---------------
+    @IntDef({SHAPE_OVAL, SHAPE_LINE, SHAPE_RECTANGLE, SHAPE_RING})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ZDrawableToolShape {
+    }
 
-    public ZDrawableTool(Context context) {
-        this.context = context;
+    @IntDef({SHAPE_OVAL, SHAPE_LINE, SHAPE_RECTANGLE, SHAPE_RING})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ZGradientDrawableBuilderOrientation {
     }
 
     //-------------
@@ -21,7 +32,7 @@ public class ZDrawableTool extends GradientDrawable {
     /***
      * 塑形
      */
-    public ZDrawableTool shape(int type) {
+    public ZDrawableTool shape(@ZDrawableToolShape int type) {
         setShape(type);
         return this;
     }
@@ -98,21 +109,22 @@ public class ZDrawableTool extends GradientDrawable {
      */
     public class ZGradientDrawableBuilder {
         //正上方至正下方
-        private final int TOP_TO_BOTTOM = 1;
+        public static final int TOP_TO_BOTTOM = 1;
         //右上至左下
-        private final int TOP_RIGHT_TO_BOTTOM_LEFT = 2;
+        public static final int TOP_RIGHT_TO_BOTTOM_LEFT = 2;
         //正右方至正左方
-        private final int RIGHT_TO_LEFT = 3;
+        public static final int RIGHT_TO_LEFT = 3;
         //右下方至左上方
-        private final int BOTTOM_RIGHT_TO_TOP_LEFT = 4;
+        public static final int BOTTOM_RIGHT_TO_TOP_LEFT = 4;
         //正下方至正上方
-        private final int BOTTOM_TO_TOP = 5;
+        public static final int BOTTOM_TO_TOP = 5;
         //左下方至右上方
-        private final int BOTTOM_LEFT_TO_TOP_RIGHT = 6;
+        public static final int BOTTOM_LEFT_TO_TOP_RIGHT = 6;
         //正左方至正右方
-        private final int LEFT_TO_RIGHT = 7;
+        public static final int LEFT_TO_RIGHT = 7;
         //左上方至右下方
-        private final int TOP_LEFT_TO_BOTTOM_RIGHT = 8;
+        public static final int TOP_LEFT_TO_BOTTOM_RIGHT = 8;
+
 
 
         /***
@@ -132,7 +144,7 @@ public class ZDrawableTool extends GradientDrawable {
          * @param orientation
          * @return
          */
-        public ZGradientDrawableBuilder setGradientFromTo(int orientation) {
+        public ZGradientDrawableBuilder setGradientFromTo(@ZGradientDrawableBuilderOrientation int orientation) {
             ZDrawableTool.this.setOrientation(getOrientation(orientation));
             return this;
         }
