@@ -22,7 +22,10 @@ public class ZDrawableTool extends GradientDrawable {
     public @interface ZDrawableToolShape {
     }
 
-    @IntDef({SHAPE_OVAL, SHAPE_LINE, SHAPE_RECTANGLE, SHAPE_RING})
+    @IntDef({ZGradientDrawableBuilder.TOP_TO_BOTTOM, ZGradientDrawableBuilder.TOP_RIGHT_TO_BOTTOM_LEFT,
+            ZGradientDrawableBuilder.RIGHT_TO_LEFT, ZGradientDrawableBuilder.BOTTOM_RIGHT_TO_TOP_LEFT,
+            ZGradientDrawableBuilder.BOTTOM_TO_TOP, ZGradientDrawableBuilder.BOTTOM_LEFT_TO_TOP_RIGHT,
+            ZGradientDrawableBuilder.LEFT_TO_RIGHT, ZGradientDrawableBuilder.TOP_LEFT_TO_BOTTOM_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface ZGradientDrawableBuilderOrientation {
     }
