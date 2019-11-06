@@ -97,7 +97,7 @@ public class ZDrawableTool extends GradientDrawable {
     /***
      *  設置漸層
      */
-    public ZGradientDrawableBuilder buildGradientDrawable() {
+    public ZGradientDrawableBuilder zGradientDrawableBuilder() {
         return new ZGradientDrawableBuilder();
     }
 
@@ -124,7 +124,6 @@ public class ZDrawableTool extends GradientDrawable {
         public static final int LEFT_TO_RIGHT = 7;
         //左上方至右下方
         public static final int TOP_LEFT_TO_BOTTOM_RIGHT = 8;
-
 
 
         /***
@@ -160,6 +159,16 @@ public class ZDrawableTool extends GradientDrawable {
         public ZGradientDrawableBuilder setGradientCenter(float x, float y) {
             ZDrawableTool.this.setGradientCenter(x, y);
             return this;
+        }
+
+        //--------------------
+
+        /***
+         * 回調
+         * @return
+         */
+        public ZDrawableTool build() {
+            return ZDrawableTool.this;
         }
 
         //--------------------
