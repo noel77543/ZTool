@@ -65,8 +65,8 @@ public class ZSelectorTool extends StateListDrawable {
      * 當enable
      * @param drawable
      */
-    public ZSelectorTool addEanbleState(Drawable drawable) {
-        addState(new int[]{android.R.attr.state_enabled}, drawable);
+    public ZSelectorTool addDisableState(Drawable drawable) {
+        addState(new int[]{-android.R.attr.state_enabled}, drawable);
         return this;
     }
 
