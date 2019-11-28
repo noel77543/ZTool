@@ -1,5 +1,6 @@
 package tw.noel.sung.com.ztool.tool.ui;
 
+import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 
 import androidx.annotation.IntDef;
@@ -72,6 +73,16 @@ public class ZDrawableTool extends GradientDrawable {
      */
     public ZDrawableTool stroke(int width, int colorRes) {
         setStroke(width, colorRes);
+        return this;
+    }
+
+    //----------
+
+    /***
+     * 邊際線  虛線
+     */
+    public ZDrawableTool stroke(int width, int colorRes, float dashWidth, float dashGap) {
+        setStroke(width, colorRes, dashWidth, dashGap);
         return this;
     }
 
