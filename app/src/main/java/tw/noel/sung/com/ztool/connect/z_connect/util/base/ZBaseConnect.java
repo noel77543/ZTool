@@ -20,6 +20,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import tw.noel.sung.com.ztool.connect.z_connect.util.SslSocketHelper;
 import tw.noel.sung.com.ztool.connect.z_connect.util.dialog.ZLoadingDialog;
 
 /**
@@ -71,13 +72,17 @@ public class ZBaseConnect {
     public @interface ConnectResponse {
     }
 
-
+    private SslSocketHelper sslSocketHelper;
     public ZBaseConnect(Context context) {
         this.context = new WeakReference<Context>(context);
+        sslSocketHelper = new SslSocketHelper();
+
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .sslSocketFactory(sslSocketHelper.createSSLSocketFactory(), sslSocketHelper)
+                .hostnameVerifier(sslSocketHelper)
                 .build();
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(this.context.get());

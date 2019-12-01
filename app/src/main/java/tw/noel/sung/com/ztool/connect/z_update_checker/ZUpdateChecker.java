@@ -2,23 +2,11 @@ package tw.noel.sung.com.ztool.connect.z_update_checker;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import tw.noel.sung.com.ztool.connect.z_connect.ZConnect;
 import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
 import tw.noel.sung.com.ztool.connect.z_update_checker.util.ZUpdateHandler;
