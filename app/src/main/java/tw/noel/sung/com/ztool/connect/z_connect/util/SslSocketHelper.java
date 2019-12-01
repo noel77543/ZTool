@@ -37,7 +37,7 @@ public class SslSocketHelper implements X509TrustManager, HostnameVerifier {
 
     @Override
     public X509Certificate[] getAcceptedIssuers() {
-        return new X509Certificate[0];
+        return null;
     }
 
     @Override

@@ -10,6 +10,8 @@ import androidx.annotation.StringDef;
 
 import com.google.gson.Gson;
 
+import org.apache.http.conn.ssl.SSLSocketFactory;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
@@ -77,12 +79,13 @@ public class ZBaseConnect {
         this.context = new WeakReference<Context>(context);
         sslSocketHelper = new SslSocketHelper();
 
+
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
                 .sslSocketFactory(sslSocketHelper.createSSLSocketFactory(), sslSocketHelper)
-                .hostnameVerifier(sslSocketHelper)
+                .hostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER)
                 .build();
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(this.context.get());
