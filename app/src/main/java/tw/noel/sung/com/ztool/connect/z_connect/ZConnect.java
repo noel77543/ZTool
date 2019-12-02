@@ -24,6 +24,7 @@ import okio.Buffer;
 import okio.BufferedSource;
 import tw.noel.sung.com.ztool.R;
 import tw.noel.sung.com.ztool.connect.z_connect.util.base.ZBaseConnect;
+import tw.noel.sung.com.ztool.connect.z_connect.util.callback.OnNetWorkDisableListener;
 import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
 
 /**
@@ -31,9 +32,19 @@ import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
  */
 public class ZConnect extends ZBaseConnect {
 
+    private OnNetWorkDisableListener onNetWorkDisableListener;
 
     public ZConnect(Context context) {
         super(context);
+    }
+
+    //---------------
+
+    /***
+     * 網路狀態異常接口
+     */
+    public void setOnNetWorkDisableListener(OnNetWorkDisableListener onNetWorkDisableListener) {
+        this.onNetWorkDisableListener = onNetWorkDisableListener;
     }
 
 
@@ -50,7 +61,9 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                if(onNetWorkDisableListener!= null){
+                    onNetWorkDisableListener.onNetWorkDisable();
+                }
                 return;
             }
             request = new Request.Builder()
@@ -80,7 +93,9 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                if(onNetWorkDisableListener!= null){
+                    onNetWorkDisableListener.onNetWorkDisable();
+                }
                 return;
             }
             Request.Builder builder = new Request.Builder()
@@ -117,7 +132,9 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                if(onNetWorkDisableListener!= null){
+                    onNetWorkDisableListener.onNetWorkDisable();
+                }
                 return;
             }
             Request.Builder builder = new Request.Builder()
@@ -163,7 +180,9 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                if(onNetWorkDisableListener!= null){
+                    onNetWorkDisableListener.onNetWorkDisable();
+                }
                 return;
             }
             Request.Builder builder = new Request.Builder()
@@ -205,7 +224,9 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                if(onNetWorkDisableListener!= null){
+                    onNetWorkDisableListener.onNetWorkDisable();
+                }
                 return;
             }
             MultipartBody.Builder builder = new MultipartBody.Builder()
@@ -256,7 +277,9 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                Toast.makeText(context, context.getString(R.string.z_connect_net_work_not_work), Toast.LENGTH_SHORT).show();
+                if(onNetWorkDisableListener!= null){
+                    onNetWorkDisableListener.onNetWorkDisable();
+                }
                 return;
             }
 
