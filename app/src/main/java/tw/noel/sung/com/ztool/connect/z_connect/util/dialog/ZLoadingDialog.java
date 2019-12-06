@@ -38,12 +38,13 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
         layout = new LinearLayout(activity);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setGravity(Gravity.CENTER);
+        layout.setBackground(getBlurDrawable(25));
         zLoadingView = new ZLoadingView(activity);
         layout.addView(zLoadingView);
 
         setContentView(layout);
         setCancelable(false);
-        getWindow().setBackgroundDrawable(getBlurDrawable(25));
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setOnShowListener(this);
     }
 
