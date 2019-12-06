@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import tw.noel.sung.com.ztool.connect.z_connect.util.views.ZLoadingView;
+import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 
 /**
  * Created by noel on 2019/1/21.
@@ -31,12 +32,19 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
     private LinearLayout layout;
     private ZLoadingView zLoadingView;
     private Activity activity;
+    private ZCheckDeviceTool zCheckDeviceTool;
+    private int phoneWidth;
+    private int phoneHeight;
 
     public ZLoadingDialog(Context context) {
         super(context);
         activity = (Activity) context;
+        zCheckDeviceTool = new ZCheckDeviceTool(activity);
+        int[] phoneSize = zCheckDeviceTool.getPhoneSize();
+        phoneWidth = phoneSize[0];
+        phoneHeight = phoneSize[1];
         layout = new LinearLayout(activity);
-        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.setLayoutParams(new ViewGroup.LayoutParams(phoneWidth, phoneHeight));
         layout.setGravity(Gravity.CENTER);
         layout.setBackground(getBlurDrawable(25));
         zLoadingView = new ZLoadingView(activity);
