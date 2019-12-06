@@ -42,7 +42,7 @@ public class ZConnect extends ZBaseConnect {
             @Override
             public void run() {
                 if (zLoadingDialog instanceof ZLoadingDialog && zLoadingDialog.getWindow() != null) {
-                    (zLoadingDialog).getWindow().setBackgroundDrawable(((ZLoadingDialog) zLoadingDialog).getBlurDrawable(10));
+                    (zLoadingDialog).getWindow().setBackgroundDrawable(((ZLoadingDialog) zLoadingDialog).getBlurDrawable(3));
                 }
             }
         };

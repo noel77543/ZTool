@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import tw.noel.sung.com.ztool.R;
 import tw.noel.sung.com.ztool.connect.z_connect.util.views.ZLoadingView;
 import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 
@@ -112,7 +116,13 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
             blurScript.forEach(allocationOutput);
 
             allocationOutput.copyTo(outputBitmap);
-            return new BitmapDrawable(outputBitmap);
+
+            Paint paint = new Paint();
+            paint.setColor(activity.getResources().getColor(R.color.z_loading_dialog_background));
+            RectF rect = new RectF(0, 0, outputBitmap.getWidth(), outputBitmap.getHeight());
+            new Canvas(outputBitmap).drawRoundRect(rect, 0, 0, paint);
+
+            return new BitmapDrawable(activity.getResources(), outputBitmap);
         } catch (Exception e) {
             Log.e("Error", "Android版本過低");
             return null;
