@@ -52,9 +52,10 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
 
         setContentView(layout);
         setCancelable(false);
-        
+
         getWindow().setLayout(phoneWidth, phoneHeight);
-        getWindow().setBackgroundDrawable(getBlurDrawable(25));
+
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setOnShowListener(this);
     }
 
@@ -70,7 +71,7 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
      * 將圖片模糊化
      * @return
      */
-    private Drawable getBlurDrawable(float blurLevel) {
+    public Drawable getBlurDrawable(float blurLevel) {
         Bitmap blurBitmap = getScreenShotAsBitmap();
 
         //不得為負數
@@ -91,34 +92,29 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
                 return null;
             }
 
-            // 将缩小后的图片做为预渲染的图片。
+            //縮小圖片  降低延展後的解析度
             Bitmap inputBitmap = Bitmap.createScaledBitmap(blurBitmap, width, height, false);
-            // 创建一张渲染后的输出图片。
+            //創建渲染後的圖片
             outputBitmap = Bitmap.createBitmap(inputBitmap);
 
-            // 创建RenderScript内核对象
-            RenderScript rs = RenderScript.create(activity);
-            // 创建一个模糊效果的RenderScript的工具对象
-            ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+            RenderScript renderScript = RenderScript.create(activity);
+            //模糊效果初始化
+            ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
 
             // 由于RenderScript并没有使用VM来分配内存,所以需要使用Allocation类来创建和分配内存空间。
             // 创建Allocation对象的时候其实内存是空的,需要使用copyTo()将数据填充进去。
-            Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
-            Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+            Allocation allocationInput = Allocation.createFromBitmap(renderScript, inputBitmap);
+            Allocation allocationOutput = Allocation.createFromBitmap(renderScript, outputBitmap);
 
-            // 设置渲染的模糊程度, 25f是最大模糊度
+            // 調整模糊強度 最大值為25f
             blurScript.setRadius(blurLevel);
-            // 设置blurScript对象的输入内存
-            blurScript.setInput(tmpIn);
-            // 将输出数据保存到输出内存中
-            blurScript.forEach(tmpOut);
+            blurScript.setInput(allocationInput);
+            blurScript.forEach(allocationOutput);
 
-            // 将数据填充到Allocation中
-            tmpOut.copyTo(outputBitmap);
-
+            allocationOutput.copyTo(outputBitmap);
             return new BitmapDrawable(outputBitmap);
         } catch (Exception e) {
-            Log.e("Bemboy_Error", "Android版本过低");
+            Log.e("Error", "Android版本過低");
             return null;
         }
     }
@@ -128,7 +124,7 @@ public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowList
     /***
      *  當前Activity截圖
      */
-    public Bitmap getScreenShotAsBitmap() {
+    private Bitmap getScreenShotAsBitmap() {
         View view = ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
         try {
             view.setDrawingCacheEnabled(true);

@@ -26,6 +26,7 @@ import tw.noel.sung.com.ztool.R;
 import tw.noel.sung.com.ztool.connect.z_connect.util.base.ZBaseConnect;
 import tw.noel.sung.com.ztool.connect.z_connect.util.callback.OnNetWorkDisableListener;
 import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
+import tw.noel.sung.com.ztool.connect.z_connect.util.dialog.ZLoadingDialog;
 
 /**
  * Created by noel on 2019/1/21.
@@ -33,9 +34,18 @@ import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
 public class ZConnect extends ZBaseConnect {
 
     private OnNetWorkDisableListener onNetWorkDisableListener;
+    private Runnable blurRunnable;
 
     public ZConnect(Context context) {
         super(context);
+        blurRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (zLoadingDialog instanceof ZLoadingDialog && zLoadingDialog.getWindow() != null) {
+                    (zLoadingDialog).getWindow().setBackgroundDrawable(((ZLoadingDialog) zLoadingDialog).getBlurDrawable(25));
+                }
+            }
+        };
     }
 
     //---------------
@@ -61,7 +71,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -93,7 +103,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -132,7 +142,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -180,7 +190,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -224,7 +234,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -277,7 +287,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -324,13 +334,14 @@ public class ZConnect extends ZBaseConnect {
                     //show loading dialog
                     case SHOW_DIALOG:
                         if (zLoadingDialog != null) {
+                            postDelayed(blurRunnable, 100);
                             zLoadingDialog.show();
                         }
                         break;
                     //dismiss loading dialog
                     case DISMISS_DIALOG:
                         //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
-                        if (zLoadingDialog != null && okHttpClient.dispatcher().runningCallsCount() == 0) {
+                        if (zLoadingDialog != null  && okHttpClient.dispatcher().runningCallsCount() == 0) {
                             zLoadingDialog.dismiss();
                         }
                         break;
