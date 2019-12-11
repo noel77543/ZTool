@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
@@ -14,17 +13,13 @@ import com.google.gson.Gson;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.CipherSuite;
-import okhttp3.ConnectionSpec;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.TlsVersion;
 import tw.noel.sung.com.ztool.connect.z_connect.util.dialog.ZLoadingDialog;
 
 /**
@@ -83,17 +78,10 @@ public class ZBaseConnect {
                 .connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
                 .writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
                 .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
-                .connectionSpecs(Collections.singletonList(new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
-                        .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
-                        .cipherSuites(
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
-                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA)
-                        .build()))
                 .build();
         gson = new Gson();
         zLoadingDialog = new ZLoadingDialog(this.context.get());
+
     }
 
 
