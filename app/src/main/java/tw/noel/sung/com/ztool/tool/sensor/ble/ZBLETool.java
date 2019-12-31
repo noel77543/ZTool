@@ -1,5 +1,6 @@
 package tw.noel.sung.com.ztool.tool.sensor.ble;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -7,8 +8,11 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+
+import androidx.annotation.RequiresPermission;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -17,7 +21,7 @@ import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 import tw.noel.sung.com.ztool.tool.sensor.ble.callback.ZBLEHandler;
 import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
-public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
+public class ZBLETool implements BluetoothAdapter.LeScanCallback {
 
     private Context context;
     private ZCheckDeviceTool zCheckDeviceTool;
@@ -30,6 +34,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
     private ArrayList<BluetoothDevice> bleDevices = new ArrayList<>();
     private boolean isBLEEnable = true;
     private ZBLEConvertUtil zbleConvertUtil;
+    private Runnable scanRunnable;
 
     public ZBLETool(Context context, ZBLEHandler zbleHandler) {
         this.context = context;
@@ -42,11 +47,21 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
         } else {
 
             bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-            bluetoothAdapter = bluetoothManager.getAdapter();
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            bluetoothAdapter.enable();
             if (bluetoothAdapter == null) {
                 isBLEEnable = false;
                 zbleHandler.onBLENotHave();
             }
+
+            //持續時間結束  關閉掃描
+            scanRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    bluetoothAdapter.stopLeScan(ZBLETool.this);
+                    ZBLETool.this.zbleHandler.onScanFinished(bleDevices);
+                }
+            };
         }
     }
 
@@ -78,12 +93,17 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
     /***
      * 搜尋附近藍芽裝置
      */
-    public void scanDevice(long scanMilliSecond) {
+    @RequiresPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+    public void scanDevice(long scanMilliSecond, boolean showSelfDevice) {
         if (isBLEEnable) {
             bleDevices.clear();
-            handler.removeCallbacks(this);
-            handler.postDelayed(this, scanMilliSecond);
-            bluetoothAdapter.startLeScan(this);
+            handler.removeCallbacks(scanRunnable);
+            handler.postDelayed(scanRunnable, scanMilliSecond);
+            bluetoothAdapter.startDiscovery();
+            if (showSelfDevice){
+                //可被看見 3600 毫秒
+                context.startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3600));
+            }
         }
     }
 
@@ -124,14 +144,5 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
         }
     }
 
-    //-----------
 
-    /***
-     *  持續時間結束  關閉掃描
-     */
-    @Override
-    public void run() {
-        bluetoothAdapter.stopLeScan(this);
-        zbleHandler.onScanFinished(bleDevices);
-    }
 }
