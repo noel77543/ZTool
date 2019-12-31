@@ -6,16 +6,19 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
 public class ZBLEHandler {
-
+    private final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     private BluetoothGatt bluetoothGatt;
     private ZBLEConvertUtil ZBLEConvertUtil;
     private Context context;
@@ -73,12 +76,19 @@ public class ZBLEHandler {
                         List<BluetoothGattCharacteristic> gattCharacteristics = bluetoothGattService
                                 .getCharacteristics();
                         for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-                            ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
-                            ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
-//                            if ("0000ffe1-0000-1000-8000-00805f9b34fb".equals(gattCharacteristic.getUuid().toString())) {
-//                                ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
-//                                ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
-//                            }
+
+                            if (SPP_UUID.equals(gattCharacteristic.getUuid().toString())) {
+                                ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
+                                ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
+
+                                UUID uuid = UUID.fromString(SPP_UUID);
+                                try {
+                                    BluetoothSocket socket = bluetoothGatt.getDevice().createRfcommSocketToServiceRecord(uuid);
+                                    socket.connect();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
 
                     }
