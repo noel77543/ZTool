@@ -73,11 +73,12 @@ public class ZBLEHandler {
                         List<BluetoothGattCharacteristic> gattCharacteristics = bluetoothGattService
                                 .getCharacteristics();
                         for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-
-                            if ("0000ffe1-0000-1000-8000-00805f9b34fb".equals(gattCharacteristic.getUuid().toString())) {
-                                ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
-                                ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
-                            }
+                            ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
+                            ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
+//                            if ("0000ffe1-0000-1000-8000-00805f9b34fb".equals(gattCharacteristic.getUuid().toString())) {
+//                                ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
+//                                ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
+//                            }
                         }
 
                     }

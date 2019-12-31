@@ -99,7 +99,6 @@ public class ZBLETool {
     /***
      * 搜尋附近藍芽裝置
      */
-    @RequiresPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
     public void scanDevice(long scanMilliSecond, boolean showSelfDevice) {
         if (isBLEEnable ) {
             if (!ZBLETool.this.bluetoothAdapter.isDiscovering()) {
