@@ -101,21 +101,18 @@ public class ZBLETool {
      */
     @RequiresPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
     public void scanDevice(long scanMilliSecond, boolean showSelfDevice) {
-        if (isBLEEnable) {
-            if (ZBLETool.this.bluetoothAdapter.isDiscovering()) {
-                ZBLETool.this.bluetoothAdapter.cancelDiscovery();
-            }
-            ZBLETool.this.context.unregisterReceiver(ZBLETool.this.zbleBroadcastReceiver);
-
-            //註冊廣播
-            context.registerReceiver(zbleBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-            bleDevices.clear();
-            handler.removeCallbacks(scanRunnable);
-            handler.postDelayed(scanRunnable, scanMilliSecond);
-            bluetoothAdapter.startDiscovery();
-            if (showSelfDevice) {
-                //可被看見 3600 毫秒
-                context.startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3600));
+        if (isBLEEnable ) {
+            if (!ZBLETool.this.bluetoothAdapter.isDiscovering()) {
+                //註冊廣播
+                context.registerReceiver(zbleBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+                bleDevices.clear();
+                handler.removeCallbacks(scanRunnable);
+                handler.postDelayed(scanRunnable, scanMilliSecond);
+                bluetoothAdapter.startDiscovery();
+                if (showSelfDevice) {
+                    //可被看見 3600 毫秒
+                    context.startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3600));
+                }
             }
         }
     }
