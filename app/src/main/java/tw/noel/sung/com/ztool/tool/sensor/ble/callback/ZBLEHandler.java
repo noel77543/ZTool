@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.noel.sung.com.ztool.R;
 import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
 public class ZBLEHandler {
@@ -31,16 +30,29 @@ public class ZBLEHandler {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 super.onConnectionStateChange(gatt, status, newState);
+                switch (status) {
+                    case BluetoothGatt.GATT_SUCCESS:
+                        break;
+                    //連線失敗
+                    case BluetoothGatt.GATT_FAILURE:
 
-                switch (newState) {
-                    //連線成功
-                    case BluetoothProfile.STATE_CONNECTED:
-                        onTargetBLEDeviceConnected();
                         break;
-                    //解除連線
-                    case BluetoothProfile.STATE_DISCONNECTED:
-                        onTargetBLEDeviceDisconnected();
-                        break;
+                }
+
+                //連線成功
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    onTargetBLEDeviceConnected();
+
+                    try {
+                        Thread.sleep(600);
+                        bluetoothGatt.discoverServices();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //連線結束
+                else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    onTargetBLEDeviceDisconnected();
                 }
             }
 
@@ -54,7 +66,7 @@ public class ZBLEHandler {
             //發現服務，在藍牙連接的時候會調用
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                if(bluetoothGatt != null){
+                if (bluetoothGatt != null) {
                     List<BluetoothGattService> list = bluetoothGatt.getServices();
                     for (BluetoothGattService bluetoothGattService : list) {
 
