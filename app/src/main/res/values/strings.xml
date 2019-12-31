@@ -1,6 +1,6 @@
 <resources>
     <!--ZConnect-->
-<!--    <string name="z_connect_net_work_not_work">請確認網路狀態後，再試一次。</string>-->
+    <!--    <string name="z_connect_net_work_not_work">請確認網路狀態後，再試一次。</string>-->
     <!--ZFileTool-->
     <string name="z_file_util_file_not_found">檔案不存在。</string>
 
@@ -14,4 +14,11 @@
     <string name="not_finger_print">不支援指紋辨識</string>
     <string name="finger_print">指紋辨識</string>
     <string name="cancel">取消</string>
+
+
+    <!--ZBLETool-->
+    <string name="z_ble_tool_write_info_success">寫入資訊成功</string>
+    <string name="z_ble_tool_write_info_failed">寫入資訊失敗</string>
+    <string name="z_ble_tool_write_info_non_permission">不具備權限</string>
+
 </resources>

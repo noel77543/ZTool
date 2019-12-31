@@ -3,14 +3,18 @@ package tw.noel.sung.com.ztool.tool.sensor.ble;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Handler;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 import tw.noel.sung.com.ztool.tool.sensor.ble.callback.ZBLEHandler;
+import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
 public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
 
@@ -24,11 +28,12 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
     private Handler handler = new Handler();
     private ArrayList<BluetoothDevice> bleDevices = new ArrayList<>();
     private boolean isBLEEnable = true;
+    private ZBLEConvertUtil zbleConvertUtil;
 
     public ZBLETool(Context context, ZBLEHandler zbleHandler) {
         this.context = context;
         this.zbleHandler = zbleHandler;
-
+        zbleConvertUtil = new ZBLEConvertUtil();
         zCheckDeviceTool = new ZCheckDeviceTool(context);
         if (!zCheckDeviceTool.isHasBLE()) {
             isBLEEnable = false;
@@ -42,6 +47,28 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
                 zbleHandler.onBLENotHave();
             }
         }
+    }
+
+    //--------------------
+
+    /***
+     *  發送訊息至目標裝置
+     */
+    public void sendMessage(String message) {
+        BluetoothGattCharacteristic bluetoothGattCharacteristic = zbleHandler.getGattCharacteristic();
+        boolean isSendSuccess = false;
+        if (isBLEEnable && bluetoothGattCharacteristic != null) {
+            byte[] messageBytes = zbleConvertUtil.covertHexToByteArray(message);
+            byte[] sendData = new byte[messageBytes.length + 2];
+            sendData[0] = (byte) 0xaa;
+            sendData[sendData.length - 1] = (byte) 0xff;
+            for (int i = 1; i < sendData.length - 1; i++) {
+                sendData[i] = messageBytes[i - 1];
+            }
+            bluetoothGattCharacteristic.setValue(sendData);
+            isSendSuccess = bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
+        }
+        zbleHandler.onSendMessageToTargetBLEDevice(isSendSuccess, message);
     }
 
 
@@ -71,6 +98,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
             BluetoothDevice currentConnectDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
             if (currentConnectDevice != null) {
                 bluetoothGatt = currentConnectDevice.connectGatt(context, false, zbleHandler.getBluetoothGattCallback());
+                zbleHandler.setBluetoothGatt(bluetoothGatt);
             }
             //裝置不存在 或已關閉藍芽配對
             else {
