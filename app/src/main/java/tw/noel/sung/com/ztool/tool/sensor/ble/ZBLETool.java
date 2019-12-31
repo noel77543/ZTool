@@ -7,8 +7,13 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -19,6 +24,7 @@ import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
 public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
 
+    private final String PERMISSION_ACCESS_COARSE_LOCATION = "android.permission.ACCESS_COARSE_LOCATION";
     private Context context;
     private ZCheckDeviceTool zCheckDeviceTool;
     private ZBLEHandler zbleHandler;
@@ -36,7 +42,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
         this.zbleHandler = zbleHandler;
         zbleConvertUtil = new ZBLEConvertUtil();
         zCheckDeviceTool = new ZCheckDeviceTool(context);
-        if (!zCheckDeviceTool.isHasBLE()) {
+        if (!zCheckDeviceTool.isHasBLE() || !hasPermission()) {
             isBLEEnable = false;
             zbleHandler.onBLENotHave();
         } else {
@@ -119,7 +125,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
      */
     @Override
     public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
-        Log.e("TTT",bluetoothDevice.getAddress());
+        Log.e("TTT", bluetoothDevice.getAddress());
         if (!bleDevices.contains(bluetoothDevice)) {
             bleDevices.add(bluetoothDevice);
         }
@@ -135,4 +141,20 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
         bluetoothAdapter.stopLeScan(this);
         zbleHandler.onScanFinished(bleDevices);
     }
+
+
+    //------------
+
+    /***
+     * 具備權限
+     * @return
+     */
+    private boolean hasPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return (ActivityCompat.checkSelfPermission(context, PERMISSION_ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+        }
+        return true;
+    }
+
+
 }
