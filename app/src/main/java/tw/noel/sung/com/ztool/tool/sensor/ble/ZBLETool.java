@@ -5,23 +5,22 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 import tw.noel.sung.com.ztool.tool.sensor.ble.callback.ZBLEHandler;
 import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
-public class ZBLETool implements BluetoothAdapter.LeScanCallback {
+public class ZBLETool {
 
     private Context context;
     private ZCheckDeviceTool zCheckDeviceTool;
@@ -35,6 +34,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback {
     private boolean isBLEEnable = true;
     private ZBLEConvertUtil zbleConvertUtil;
     private Runnable scanRunnable;
+    private ZBLEBroadcastReceiver zbleBroadcastReceiver;
 
     public ZBLETool(Context context, ZBLEHandler zbleHandler) {
         this.context = context;
@@ -49,6 +49,13 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback {
             bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             bluetoothAdapter.enable();
+
+            zbleBroadcastReceiver = new ZBLEBroadcastReceiver();
+            //註冊廣播
+            IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+            context.registerReceiver(zbleBroadcastReceiver, intentFilter);
+
+
             if (bluetoothAdapter == null) {
                 isBLEEnable = false;
                 zbleHandler.onBLENotHave();
@@ -58,7 +65,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback {
             scanRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    bluetoothAdapter.stopLeScan(ZBLETool.this);
+                    bluetoothAdapter.cancelDiscovery();
                     ZBLETool.this.zbleHandler.onScanFinished(bleDevices);
                 }
             };
@@ -100,7 +107,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback {
             handler.removeCallbacks(scanRunnable);
             handler.postDelayed(scanRunnable, scanMilliSecond);
             bluetoothAdapter.startDiscovery();
-            if (showSelfDevice){
+            if (showSelfDevice) {
                 //可被看見 3600 毫秒
                 context.startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 3600));
             }
@@ -129,20 +136,26 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback {
     }
 
 
-    //-----------------
+    //-------------
 
     /***
-     *  當掃描獲得鄰近藍芽裝置
-     * @param bluetoothDevice
-     * @param i
-     * @param bytes
+     * 廣播器
      */
-    @Override
-    public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
-        if (!bleDevices.contains(bluetoothDevice)) {
-            bleDevices.add(bluetoothDevice);
+    private class ZBLEBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            //當掃描獲得鄰近藍芽裝置
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                //搜尋到的藍芽裝置
+                BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (!bleDevices.contains(bluetoothDevice)) {
+                    bleDevices.add(bluetoothDevice);
+                }
+            }
         }
     }
-
-
 }
+
+
+
