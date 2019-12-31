@@ -49,11 +49,7 @@ public class ZBLETool {
             bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             bluetoothAdapter.enable();
-
             zbleBroadcastReceiver = new ZBLEBroadcastReceiver();
-            //註冊廣播
-            IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            context.registerReceiver(zbleBroadcastReceiver, intentFilter);
 
 
             if (bluetoothAdapter == null) {
@@ -65,7 +61,8 @@ public class ZBLETool {
             scanRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    bluetoothAdapter.cancelDiscovery();
+                    ZBLETool.this.context.unregisterReceiver(ZBLETool.this.zbleBroadcastReceiver);
+                    ZBLETool.this.bluetoothAdapter.cancelDiscovery();
                     ZBLETool.this.zbleHandler.onScanFinished(bleDevices);
                 }
             };
@@ -103,6 +100,9 @@ public class ZBLETool {
     @RequiresPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
     public void scanDevice(long scanMilliSecond, boolean showSelfDevice) {
         if (isBLEEnable) {
+            //註冊廣播
+            context.registerReceiver(zbleBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+
             bleDevices.clear();
             handler.removeCallbacks(scanRunnable);
             handler.postDelayed(scanRunnable, scanMilliSecond);
