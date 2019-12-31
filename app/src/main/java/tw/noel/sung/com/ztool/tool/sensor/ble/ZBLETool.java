@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -118,6 +119,7 @@ public class ZBLETool implements BluetoothAdapter.LeScanCallback, Runnable {
      */
     @Override
     public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
+        Log.e("TTT",bluetoothDevice.getAddress());
         if (!bleDevices.contains(bluetoothDevice)) {
             bleDevices.add(bluetoothDevice);
         }
