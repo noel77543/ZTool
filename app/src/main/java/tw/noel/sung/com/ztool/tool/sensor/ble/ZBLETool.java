@@ -155,7 +155,7 @@ public class ZBLETool {
      * @param deviceAddress  自onLeScan接收的BluetoothDevice中的address
      */
     public void connectDevice(String deviceAddress) {
-        if (isBLEEnable ) {
+        if (isBLEEnable) {
             bluetoothAdapter.cancelDiscovery();
 
             BluetoothDevice currentConnectDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
@@ -220,14 +220,17 @@ public class ZBLETool {
             //當掃描獲得鄰近藍芽裝置
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 
-                int rssi = intent.getIntExtra(BluetoothDevice.EXTRA_RSSI,0);
-                Log.e("TTT",rssi+"");
+                short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
+                if(rssi> Short.MIN_VALUE){
+                    Log.e("TTT", rssi + "");
+                }else {
+                    Log.e("NNN", rssi + "");
+                }
 
 
                 //搜尋到的藍芽裝置
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.e("TTT",bluetoothDevice.getName()+"");
-
+                Log.e("TTT", bluetoothDevice.getName() + "");
 
 
                 if (!bleDevices.contains(bluetoothDevice)) {
