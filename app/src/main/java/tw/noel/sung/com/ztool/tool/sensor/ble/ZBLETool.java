@@ -1,24 +1,21 @@
 package tw.noel.sung.com.ztool.tool.sensor.ble;
 
-import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
-import java.io.IOException;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 import tw.noel.sung.com.ztool.tool.sensor.ble.callback.ZBLEHandler;
-import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEClientThread;
 import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
 public class ZBLETool {
@@ -36,7 +33,8 @@ public class ZBLETool {
     private ZBLEConvertUtil zbleConvertUtil;
     private Runnable scanRunnable;
     private ZBLEBroadcastReceiver zbleBroadcastReceiver;
-    public static String MY_UUID = "00001101-0000-1000-8000-00805F9B34FB";
+    //所有的藍芽技術聯盟定義UUID共用了一個基本的UUID
+    public static String MY_UUID = "0x0000xxxx-0000-1000-8000-00805F9B34FB";
 
 
     public ZBLETool(Context context, ZBLEHandler zbleHandler) {
@@ -164,11 +162,8 @@ public class ZBLETool {
             if (currentConnectDevice != null) {
 
 
-                new ZBLEClientThread(currentConnectDevice).run();
-//                bluetoothGatt = currentConnectDevice.connectGatt(context, false, zbleHandler.getBluetoothGattCallback());
-//                zbleHandler.setBluetoothGatt(bluetoothGatt);
-
-
+                bluetoothGatt = currentConnectDevice.connectGatt(context, false, zbleHandler.getBluetoothGattCallback());
+                zbleHandler.setBluetoothGatt(bluetoothGatt);
             }
             //裝置不存在 或已關閉藍芽配對 或未結束掃描
             else {
@@ -224,8 +219,17 @@ public class ZBLETool {
             String action = intent.getAction();
             //當掃描獲得鄰近藍芽裝置
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+
+                int rssi = intent.getIntExtra(BluetoothDevice.EXTRA_RSSI,0);
+                Log.e("TTT",rssi+"");
+
+
                 //搜尋到的藍芽裝置
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.e("TTT",bluetoothDevice.getName());
+
+
+
                 if (!bleDevices.contains(bluetoothDevice)) {
                     bleDevices.add(bluetoothDevice);
                 }
