@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import tw.noel.sung.com.ztool.tool.sensor.ble.ZBLEObject;
 import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
 public class ZBLEHandler {
@@ -128,7 +130,7 @@ public class ZBLEHandler {
     /***
      *  當搜尋完畢
      */
-    public void onScanFinished(ArrayList<BluetoothDevice> bleDevices) {
+    public void onScanFinished(Set<ZBLEObject> bleDevices) {
 
     }
 

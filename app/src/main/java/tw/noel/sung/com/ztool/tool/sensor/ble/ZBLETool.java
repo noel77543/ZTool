@@ -13,6 +13,9 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 import tw.noel.sung.com.ztool.tool.sensor.ble.callback.ZBLEHandler;
@@ -28,7 +31,7 @@ public class ZBLETool {
     private BluetoothGatt bluetoothGatt;
 
     private Handler handler = new Handler();
-    private ArrayList<BluetoothDevice> bleDevices = new ArrayList<>();
+    private Set<ZBLEObject> zbleObjects = new HashSet<>();
     private boolean isBLEEnable = true;
     private ZBLEConvertUtil zbleConvertUtil;
     private Runnable scanRunnable;
@@ -66,7 +69,7 @@ public class ZBLETool {
                         ZBLETool.this.bluetoothAdapter.cancelDiscovery();
                     }
                     ZBLETool.this.context.unregisterReceiver(ZBLETool.this.zbleBroadcastReceiver);
-                    ZBLETool.this.zbleHandler.onScanFinished(bleDevices);
+                    ZBLETool.this.zbleHandler.onScanFinished(zbleObjects);
                 }
             };
         }
@@ -111,7 +114,7 @@ public class ZBLETool {
 
                 //註冊廣播
                 context.registerReceiver(zbleBroadcastReceiver, intentFilter);
-                bleDevices.clear();
+                zbleObjects.clear();
                 handler.removeCallbacks(scanRunnable);
                 //如有設定時間開啟則開始倒數 時間到後關閉掃描
                 if (second > 0) {
@@ -223,17 +226,12 @@ public class ZBLETool {
                 short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 Log.e("T", rssi + "");
 
-                String uuid = intent.getStringExtra(BluetoothDevice.EXTRA_UUID);
-                Log.e("TT", uuid);
 
                 //搜尋到的藍芽裝置
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 Log.e("TTT", bluetoothDevice.getName() + "");
 
-
-                if (!bleDevices.contains(bluetoothDevice)) {
-                    bleDevices.add(bluetoothDevice);
-                }
+                zbleObjects.add(new ZBLEObject(bluetoothDevice, rssi));
             }
         }
     }
