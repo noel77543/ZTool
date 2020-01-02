@@ -226,7 +226,7 @@ public class ZBLETool {
 
                 //搜尋到的藍芽裝置
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.e("TTT",bluetoothDevice.getName());
+                Log.e("TTT",bluetoothDevice.getName()+"");
 
 
 
