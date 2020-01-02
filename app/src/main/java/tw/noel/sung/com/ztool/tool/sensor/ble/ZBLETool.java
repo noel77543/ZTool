@@ -221,13 +221,11 @@ public class ZBLETool {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 
                 short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
-                if(rssi> Short.MIN_VALUE){
-                    Log.e("TTT", rssi + "");
-                }else {
-                    Log.e("NNN", rssi + "");
-                }
+                Log.e("T", rssi + "");
 
-
+                String uuid = intent.getStringExtra(BluetoothDevice.EXTRA_UUID);
+                Log.e("TT", uuid);
+                
                 //搜尋到的藍芽裝置
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 Log.e("TTT", bluetoothDevice.getName() + "");
