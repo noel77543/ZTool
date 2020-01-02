@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,10 +18,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import tw.noel.sung.com.ztool.tool.sensor.ble.ZBLEObject;
+import tw.noel.sung.com.ztool.tool.sensor.ble.ZBLETool;
 import tw.noel.sung.com.ztool.tool.sensor.ble.util.ZBLEConvertUtil;
 
 public class ZBLEHandler {
-    private final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
+    //    private final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
     private BluetoothGatt bluetoothGatt;
     private ZBLEConvertUtil ZBLEConvertUtil;
     private Context context;
@@ -35,25 +37,23 @@ public class ZBLEHandler {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 super.onConnectionStateChange(gatt, status, newState);
-                switch (status) {
-                    case BluetoothGatt.GATT_SUCCESS:
-                        break;
-                    //連線失敗
-                    case BluetoothGatt.GATT_FAILURE:
 
-                        break;
-                }
 
+//                switch (status) {
+//
+//                    case BluetoothGatt.GATT_SUCCESS:
+//                        break;
+//                    //連線失敗
+//                    case BluetoothGatt.GATT_FAILURE:
+//
+//                        break;
+//                }
+
+
+                Log.e("TTT", newState + "");
                 //連線成功
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     onTargetBLEDeviceConnected();
-
-                    try {
-                        Thread.sleep(600);
-                        bluetoothGatt.discoverServices();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
                 //連線結束
                 else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -68,34 +68,33 @@ public class ZBLEHandler {
             }
 
 
-            //發現服務，在藍牙連接的時候會調用
-            @Override
-            public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                if (bluetoothGatt != null) {
-                    List<BluetoothGattService> list = bluetoothGatt.getServices();
-                    for (BluetoothGattService bluetoothGattService : list) {
-
-                        List<BluetoothGattCharacteristic> gattCharacteristics = bluetoothGattService
-                                .getCharacteristics();
-                        for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-
-                            if (SPP_UUID.equals(gattCharacteristic.getUuid().toString())) {
-                                ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
-                                ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
-
-                                UUID uuid = UUID.fromString(SPP_UUID);
-                                try {
-                                    BluetoothSocket socket = bluetoothGatt.getDevice().createRfcommSocketToServiceRecord(uuid);
-                                    socket.connect();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
+//            //發現服務，在藍牙連接的時候會調用
+//            @Override
+//            public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+//                if (bluetoothGatt != null) {
+//                    List<BluetoothGattService> list = bluetoothGatt.getServices();
+//                    for (BluetoothGattService bluetoothGattService : list) {
+//
+//                        List<BluetoothGattCharacteristic> gattCharacteristics = bluetoothGattService
+//                                .getCharacteristics();
+//                        for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+//
+//                            if (ZBLETool.MY_UUID.equals(gattCharacteristic.getUuid().toString())) {
+//                                ZBLEHandler.this.bluetoothGattService = bluetoothGattService;
+//                                ZBLEHandler.this.gattCharacteristic = gattCharacteristic;
+//
+//                                try {
+//                                    BluetoothSocket socket = bluetoothGatt.getDevice().createRfcommSocketToServiceRecord(UUID.fromString(ZBLETool.MY_UUID));
+//                                    socket.connect();
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }
+//
+//                    }
+//                }
+//            }
         };
     }
 

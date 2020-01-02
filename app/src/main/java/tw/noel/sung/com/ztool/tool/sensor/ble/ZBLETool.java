@@ -174,8 +174,9 @@ public class ZBLETool {
                 zbleHandler.setBluetoothGatt(bluetoothGatt);
                 try {
                     Method method = currentConnectDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-                    BluetoothSocket socket = (BluetoothSocket)method.invoke(currentConnectDevice, Integer.valueOf(1));
-                    socket.connect();
+                    BluetoothSocket bluetoothSocket = (BluetoothSocket)method.invoke(currentConnectDevice, Integer.valueOf(1));
+                    bluetoothSocket.connect();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (NoSuchMethodException e) {
