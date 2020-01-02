@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +13,14 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.util.Log;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 import tw.noel.sung.com.ztool.tool.sensor.ble.callback.ZBLEHandler;
@@ -167,6 +172,19 @@ public class ZBLETool {
 
                 bluetoothGatt = currentConnectDevice.connectGatt(context, false, zbleHandler.getBluetoothGattCallback());
                 zbleHandler.setBluetoothGatt(bluetoothGatt);
+                try {
+                    Method method = currentConnectDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                    BluetoothSocket socket = (BluetoothSocket)method.invoke(currentConnectDevice, Integer.valueOf(1));
+                    socket.connect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
             //裝置不存在 或已關閉藍芽配對 或未結束掃描
             else {
@@ -222,14 +240,10 @@ public class ZBLETool {
             String action = intent.getAction();
             //當掃描獲得鄰近藍芽裝置
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-
+                //rssi
                 short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
-                Log.e("T", rssi + "");
-
-
                 //搜尋到的藍芽裝置
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.e("TTT", bluetoothDevice.getName() + "");
 
                 zbleObjects.add(new ZBLEObject(bluetoothDevice, rssi));
             }
