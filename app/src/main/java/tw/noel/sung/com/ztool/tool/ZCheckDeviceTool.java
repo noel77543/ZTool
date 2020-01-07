@@ -186,6 +186,15 @@ public class ZCheckDeviceTool {
     //--------------
 
     /***
+     *  是否具備NFC
+     */
+    public boolean isHasNFC(){
+        return packageManager.hasSystemFeature(PackageManager.FEATURE_NFC);
+    }
+
+    //--------------
+
+    /***
      *  取得手機寬高
      * @return
      */
