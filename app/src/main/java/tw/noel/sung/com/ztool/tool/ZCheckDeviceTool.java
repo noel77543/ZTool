@@ -10,6 +10,7 @@ import android.view.WindowManager;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.UUID;
 
 /**
  * Created by noel on 2019/3/11.
@@ -27,31 +28,11 @@ public class ZCheckDeviceTool {
     //-------------
 
     /***
-     *  取得唯一碼  MacAddress
-     *  如果使用MacAddress 時裝置须具有上網功能
+     *  自製hash UUID
      */
-    public String getMacAddress() {
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            NetworkInterface networkInterface = NetworkInterface.getByName("eth1");
-            if (networkInterface == null) {
-                networkInterface = NetworkInterface.getByName("wlan0");
-            }
-            if (networkInterface == null) {
-                return "02:00:00:00:00:02";
-            }
-            byte[] bytes = networkInterface.getHardwareAddress();
-            for (byte b : bytes) {
-                stringBuilder.append(String.format("%02X:", b));
-            }
-            if (stringBuilder.length() > 0) {
-                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-            }
-        } catch (SocketException e) {
-            e.printStackTrace();
-            return "02:00:00:00:00:02";
-        }
-        return stringBuilder.toString();
+    public String getUUID() {
+        String androidId = getAndroidID();
+        return new UUID(androidId.hashCode(), ((long) androidId.hashCode() << 32)).toString();
     }
 
     //--------------
@@ -60,7 +41,7 @@ public class ZCheckDeviceTool {
      *  取得唯一碼 Android ID
      *  如果手機恢復原廠設定 此ID將改變
      */
-    public String getAndroidID(){
+    public String getAndroidID() {
         return Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
     }
 
@@ -170,7 +151,7 @@ public class ZCheckDeviceTool {
     /***
      *  是否具備藍芽
      */
-    public boolean isHasBlueTooth(){
+    public boolean isHasBlueTooth() {
         return packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
     }
 
@@ -179,7 +160,7 @@ public class ZCheckDeviceTool {
     /***
      * 是否具備低功耗藍芽
      */
-    public boolean isHasBLE(){
+    public boolean isHasBLE() {
         return packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
     }
 
@@ -188,7 +169,7 @@ public class ZCheckDeviceTool {
     /***
      *  是否具備NFC
      */
-    public boolean isHasNFC(){
+    public boolean isHasNFC() {
         return packageManager.hasSystemFeature(PackageManager.FEATURE_NFC);
     }
 
