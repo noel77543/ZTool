@@ -21,4 +21,9 @@
     <string name="z_ble_tool_write_info_failed">寫入資訊失敗</string>
     <string name="z_ble_tool_write_info_non_permission">不具備權限</string>
 
+
+    <!--ZNFCTool-->
+    <string name="z_nfc_tool_read_exception">請先執行initial方法。</string>
+
+
 </resources>
