@@ -1,10 +1,13 @@
 package tw.noel.sung.com.ztool.tool.google_map;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 import android.util.Xml;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -92,6 +95,42 @@ public class ZMapTool {
      */
     public double getLocationScale(double zoomLevel, double lat) {
         return 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoomLevel);
+    }
+
+
+    //--------------
+
+    /***
+     * @return 取得可視範圍(googleMap上方經緯度與camera中心點經緯度的距離) 單位公尺
+     */
+    public double getCameraRadius(GoogleMap googleMap){
+        VisibleRegion visibleRegion = googleMap.getProjection().getVisibleRegion();
+
+        float[] distanceWidth = new float[1];
+        float[] distanceHeight = new float[1];
+
+        LatLng latLngFarRight = visibleRegion.farRight;
+        LatLng latLngFarLeft = visibleRegion.farLeft;
+        LatLng latLngNearRight = visibleRegion.nearRight;
+        LatLng latLngNearLeft = visibleRegion.nearLeft;
+
+        Location.distanceBetween(
+                (latLngFarLeft.latitude + latLngNearLeft.latitude) / 2,
+                latLngFarLeft.longitude,
+                (latLngFarRight.latitude + latLngNearRight.latitude) / 2,
+                latLngFarRight.longitude,
+                distanceWidth
+        );
+
+        Location.distanceBetween(
+                latLngFarRight.latitude,
+                (latLngFarRight.longitude + latLngFarLeft.longitude) / 2,
+                latLngNearRight.latitude,
+                (latLngNearRight.longitude + latLngNearLeft.longitude) / 2,
+                distanceHeight
+        );
+
+        return Math.sqrt(Math.pow(distanceWidth[0], 2) + Math.pow(distanceHeight[0], 2)) / 2;
     }
 
 
