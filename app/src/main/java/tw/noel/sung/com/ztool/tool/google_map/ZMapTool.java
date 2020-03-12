@@ -114,6 +114,7 @@ public class ZMapTool {
         LatLng latLngNearRight = visibleRegion.nearRight;
         LatLng latLngNearLeft = visibleRegion.nearLeft;
 
+        //distanceWidth 取得鏡頭左至右的直線距離
         Location.distanceBetween(
                 (latLngFarLeft.latitude + latLngNearLeft.latitude) / 2,
                 latLngFarLeft.longitude,
@@ -122,6 +123,7 @@ public class ZMapTool {
                 distanceWidth
         );
 
+        //distanceHeight 取得鏡頭上至下的直線距離
         Location.distanceBetween(
                 latLngFarRight.latitude,
                 (latLngFarRight.longitude + latLngFarLeft.longitude) / 2,
@@ -130,6 +132,7 @@ public class ZMapTool {
                 distanceHeight
         );
 
+        //將寬高都除以二後取得 鏡頭中心點至上或下的距離 以及 鏡頭中心點至左或右的距離   接著用畢氏定理得解第三邊即為半徑
         return Math.sqrt(Math.pow(distanceWidth[0], 2) + Math.pow(distanceHeight[0], 2)) / 2;
     }
 
