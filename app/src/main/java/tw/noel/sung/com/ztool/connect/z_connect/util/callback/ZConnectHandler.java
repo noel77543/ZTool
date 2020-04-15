@@ -27,7 +27,7 @@ public class ZConnectHandler {
      * @param response
      * @param code
      */
-    public void OnStringResponse(String response, int code) {
+    public void OnStringResponse(String response, String decodeResponse, int code) {
 
     }
     //-----------
@@ -44,7 +44,7 @@ public class ZConnectHandler {
     /***
      *  連線成功但回覆失敗接口
      */
-    public void OnFail(String response, int code) {
+    public void OnFail(String response, String decodeResponse, int code) {
 
     }
 }

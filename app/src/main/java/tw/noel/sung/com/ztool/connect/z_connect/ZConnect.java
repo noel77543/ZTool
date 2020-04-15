@@ -61,7 +61,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -93,7 +93,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -132,7 +132,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -180,7 +180,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -224,7 +224,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -277,7 +277,7 @@ public class ZConnect extends ZBaseConnect {
         Context context = this.context.get();
         if (context != null) {
             if (!isNetWorkable()) {
-                if(onNetWorkDisableListener!= null){
+                if (onNetWorkDisableListener != null) {
                     onNetWorkDisableListener.onNetWorkDisable();
                 }
                 return;
@@ -338,11 +338,11 @@ public class ZConnect extends ZBaseConnect {
                         zConnectHandler.OnInputStreamResponse((new BufferedInputStream((InputStream) msg.obj, 1024)), msg.arg1);
                         break;
                     case SUCCESS_STRING:
-                        zConnectHandler.OnStringResponse((String) msg.obj, msg.arg1);
+                        zConnectHandler.OnStringResponse((String) msg.obj, getDecodeResponse((String) msg.obj), msg.arg1);
                         break;
                     case FAIL:
                         if (msg.obj instanceof String) {
-                            zConnectHandler.OnFail((String) msg.obj, msg.arg1);
+                            zConnectHandler.OnFail((String) msg.obj, getDecodeResponse((String) msg.obj), msg.arg1);
                         } else {
                             zConnectHandler.OnFail((IOException) msg.obj);
                         }
@@ -413,6 +413,21 @@ public class ZConnect extends ZBaseConnect {
         message.obj = object;
         message.arg1 = statusCode;
         handler.sendMessage(message);
+    }
+
+    //------------
+
+    /***
+     * 處理特殊字符
+     */
+    private String getDecodeResponse(String decodeResponse) {
+        return decodeResponse
+                .replaceAll("\\\\n", "\n")
+                .replaceAll("\\\\t", "\t")
+                .replaceAll("\\\\b", "\b")
+                .replaceAll("\\\\r", "\r")
+                .replaceAll("\\\\f", "\f")
+                .replaceAll("\\\\'", "\'");
     }
 
 }
