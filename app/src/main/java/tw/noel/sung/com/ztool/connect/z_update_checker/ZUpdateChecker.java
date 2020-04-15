@@ -2,11 +2,13 @@ package tw.noel.sung.com.ztool.connect.z_update_checker;
 
 import android.content.Context;
 import android.text.TextUtils;
+
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 import tw.noel.sung.com.ztool.connect.z_connect.ZConnect;
 import tw.noel.sung.com.ztool.connect.z_connect.util.callback.ZConnectHandler;
 import tw.noel.sung.com.ztool.connect.z_update_checker.util.ZUpdateHandler;
@@ -34,8 +36,8 @@ public class ZUpdateChecker extends ZConnect {
     public void check(String packageName, final ZUpdateHandler zUpdateHandler) {
         get(MessageFormat.format(_GOOGLE_PLAY, packageName), new ZConnectHandler() {
             @Override
-            public void OnStringResponse(String response, int code) {
-                super.OnStringResponse(response, code);
+            public void OnStringResponse(String response, String decodeResponse, int code) {
+                super.OnStringResponse(response, decodeResponse, code);
 
                 String latestVersionName = getLatestVersionName(response);
                 if (TextUtils.isEmpty(latestVersionName)) {
@@ -52,8 +54,8 @@ public class ZUpdateChecker extends ZConnect {
             }
 
             @Override
-            public void OnFail(String response, int code) {
-                super.OnFail(response, code);
+            public void OnFail(String response, String decodeResponse, int code) {
+                super.OnFail(response, decodeResponse, code);
                 zUpdateHandler.OnFail(response, code);
             }
         });
