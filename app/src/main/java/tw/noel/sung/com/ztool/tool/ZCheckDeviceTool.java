@@ -218,4 +218,22 @@ public class ZCheckDeviceTool {
         }
         return actionbarHeight;
     }
+
+    //--------------------
+
+    /***
+     * 取得裝置廠牌
+     */
+    public String getDeviceManufacturer() {
+        return Build.MANUFACTURER;
+    }
+
+    //------------
+
+    /***
+     * 取得裝置型號
+     */
+    public String getDeviceModel() {
+        return Build.MODEL;
+    }
 }

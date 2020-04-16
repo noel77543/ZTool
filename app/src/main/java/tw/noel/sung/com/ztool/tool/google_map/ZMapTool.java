@@ -69,35 +69,6 @@ public class ZMapTool {
     }
 
 
-    //---------------------
-
-    /***
-     *  已知距離換算ZoomLevel
-     * @param lat 兩點的中心點緯度
-     * @param distanceKm  兩點距離 單位:公里
-     * @return
-     */
-    public double getTwoLocationZoom(double distanceKm, double lat) {
-        //倍率
-        final double _MAGNIFICATION = 156543.03392f * Math.cos(lat * Math.PI / 180) / distanceKm;
-        //偏差值
-        float _OFFSET = (float) (Math.log(_MAGNIFICATION)) / 2;
-        return Math.log(_MAGNIFICATION * _OFFSET);
-    }
-
-
-    //---------------------
-
-    /***
-     *   已知ZoomLevel換算比例尺
-     * @param lat 兩點的中心點緯度
-     * @param zoomLevel  地圖Level
-     */
-    public double getLocationScale(double zoomLevel, double lat) {
-        return 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoomLevel);
-    }
-
-
     //--------------
 
     /***
