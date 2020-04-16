@@ -7,9 +7,6 @@ import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
-
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.UUID;
 
 /**
@@ -52,7 +49,7 @@ public class ZCheckDeviceTool {
      *  是否具備後鏡頭
      */
     public boolean isHasBehindCamera() {
-        return packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        return packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
     }
 
     //------------

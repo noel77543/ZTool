@@ -330,7 +330,7 @@ public class ZConnect extends ZBaseConnect {
                     //dismiss loading dialog
                     case DISMISS_DIALOG:
                         //當完成連線時 如果沒有其他正在連線中的執行緒才dismiss dialog
-                        if (zLoadingDialog != null && okHttpClient.dispatcher().runningCallsCount() == 0) {
+                        if (zLoadingDialog != null && zLoadingDialog.isShowing() && okHttpClient.dispatcher().runningCallsCount() == 0) {
                             zLoadingDialog.dismiss();
                         }
                         break;
