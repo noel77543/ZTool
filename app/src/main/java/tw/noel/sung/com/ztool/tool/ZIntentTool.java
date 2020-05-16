@@ -22,7 +22,7 @@ public class ZIntentTool {
     public static final String _PACKAGE_NAME_FACEBOOK = "com.facebook.katana";
 
 
-    @StringDef({_NAVIGATION_MODE_CAR, _NAVIGATION_MODE_MOTOR})
+    @StringDef({_NAVIGATION_MODE_CAR, _NAVIGATION_MODE_MOTOR,_NAVIGATION_MODE_BICYCLE,_NAVIGATION_MODE_WALK})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NavigationMode {
     }
@@ -31,7 +31,7 @@ public class ZIntentTool {
     public static final String _NAVIGATION_MODE_MOTOR = "l";
     public static final String _NAVIGATION_MODE_BICYCLE = "b";
     public static final String _NAVIGATION_MODE_WALK = "w";
-    
+
 
     private final String _GOOGLE_MAP_SINGLE_POI_NAVIGATION_FORMAT = "google.navigation:q={0},{1}&mode={2}";
     private final String _GOOGLE_MAP_MULTIPLE_POI_NAVIGATION_FORMAT = "https://www.google.co.in/maps/dir/{0}";
