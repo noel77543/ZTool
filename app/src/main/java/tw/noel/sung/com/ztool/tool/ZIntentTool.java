@@ -1,5 +1,6 @@
 package tw.noel.sung.com.ztool.tool;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,7 +23,7 @@ public class ZIntentTool {
     public static final String _PACKAGE_NAME_FACEBOOK = "com.facebook.katana";
 
 
-    @StringDef({_NAVIGATION_MODE_CAR, _NAVIGATION_MODE_MOTOR,_NAVIGATION_MODE_BICYCLE,_NAVIGATION_MODE_WALK})
+    @StringDef({_NAVIGATION_MODE_CAR, _NAVIGATION_MODE_MOTOR, _NAVIGATION_MODE_BICYCLE, _NAVIGATION_MODE_WALK})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NavigationMode {
     }
@@ -62,7 +63,7 @@ public class ZIntentTool {
     /***
      * 前往 目標App
      */
-    public void intentToTargetApp(String targetPackageName,@Nullable OnAppNotFindListener onAppNotFindListener){
+    public void intentToTargetApp(String targetPackageName, @Nullable OnAppNotFindListener onAppNotFindListener) {
         if (isAppExist(targetPackageName)) {
             context.startActivity(context.getPackageManager().getLaunchIntentForPackage(targetPackageName));
         } else {
@@ -79,7 +80,7 @@ public class ZIntentTool {
      * 前往 GoogleMap
      */
     public void intentToGoogleMap(@Nullable OnAppNotFindListener onAppNotFindListener) {
-        intentToTargetApp(_PACKAGE_NAME_GOOGLE_MAP,onAppNotFindListener);
+        intentToTargetApp(_PACKAGE_NAME_GOOGLE_MAP, onAppNotFindListener);
     }
 
     //---
@@ -88,7 +89,7 @@ public class ZIntentTool {
      * 前往 GooglePlay
      */
     public void intentToGooglePlay(@Nullable OnAppNotFindListener onAppNotFindListener) {
-        intentToTargetApp(_PACKAGE_NAME_GOOGLE_PLAY,onAppNotFindListener);
+        intentToTargetApp(_PACKAGE_NAME_GOOGLE_PLAY, onAppNotFindListener);
     }
 
     //---
@@ -97,7 +98,7 @@ public class ZIntentTool {
      * 前往 Facebook
      */
     public void intentToFacebook(@Nullable OnAppNotFindListener onAppNotFindListener) {
-        intentToTargetApp(_PACKAGE_NAME_FACEBOOK,onAppNotFindListener);
+        intentToTargetApp(_PACKAGE_NAME_FACEBOOK, onAppNotFindListener);
     }
 
     //---
@@ -132,20 +133,23 @@ public class ZIntentTool {
     /***
      * 前往上層覆蓋權限
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void intentToOverlaySetting(String packageName) {
-        context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse(MessageFormat.format(_PERMISSION_SETTING_FORMAT, packageName))));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse(MessageFormat.format(_PERMISSION_SETTING_FORMAT, packageName))));
+        }
     }
 
-//    //---
-//
-//    /***
-//     * 前往省電達人
-//     */
-//    @RequiresApi(api = Build.VERSION_CODES.M)
-//    public void intentToIgnoreBatteryOptimizations(String packageName) {
-//        context.startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse(MessageFormat.format(_PERMISSION_SETTING_FORMAT, packageName))));
-//    }
+    //---
+
+    /***
+     * 前往省電達人
+     */
+    @SuppressLint("BatteryLife")
+    public void intentToIgnoreBatteryOptimizations(String packageName) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse(MessageFormat.format(_PERMISSION_SETTING_FORMAT, packageName))));
+        }
+    }
     //---
 
     /***
