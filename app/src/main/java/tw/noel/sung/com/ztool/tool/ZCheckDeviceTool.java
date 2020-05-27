@@ -46,21 +46,21 @@ public class ZCheckDeviceTool {
         return Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
     }
 
-    //------------
-
-    /***
-     * 是否已經存在於省電的白名單中
-     * @return
-     */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public boolean isIgnoringBatteryOptimizations(String packageName) {
-        boolean isIgnoring = false;
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if(powerManager != null) {
-            isIgnoring = powerManager.isIgnoringBatteryOptimizations(packageName);
-        }
-        return isIgnoring;
-    }
+//    //------------
+//
+//    /***
+//     * 是否已經存在於省電的白名單中
+//     * @return
+//     */
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    public boolean isIgnoringBatteryOptimizations(String packageName) {
+//        boolean isIgnoring = false;
+//        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+//        if(powerManager != null) {
+//            isIgnoring = powerManager.isIgnoringBatteryOptimizations(packageName);
+//        }
+//        return isIgnoring;
+//    }
 
 
     //--------------

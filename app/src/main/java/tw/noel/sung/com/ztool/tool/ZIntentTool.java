@@ -137,15 +137,15 @@ public class ZIntentTool {
         context.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse(MessageFormat.format(_PERMISSION_SETTING_FORMAT, packageName))));
     }
 
-    //---
-
-    /***
-     * 前往省電達人
-     */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void intentToIgnoreBatteryOptimizations(String packageName) {
-        context.startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse(MessageFormat.format(_PERMISSION_SETTING_FORMAT, packageName))));
-    }
+//    //---
+//
+//    /***
+//     * 前往省電達人
+//     */
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    public void intentToIgnoreBatteryOptimizations(String packageName) {
+//        context.startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse(MessageFormat.format(_PERMISSION_SETTING_FORMAT, packageName))));
+//    }
     //---
 
     /***
