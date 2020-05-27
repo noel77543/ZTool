@@ -3,10 +3,14 @@ package tw.noel.sung.com.ztool.tool;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.UUID;
 
 /**
@@ -40,6 +44,22 @@ public class ZCheckDeviceTool {
      */
     public String getAndroidID() {
         return Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
+    }
+
+    //------------
+
+    /***
+     * 是否已經存在於省電的白名單中
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public boolean isIgnoringBatteryOptimizations() {
+        boolean isIgnoring = false;
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if(powerManager != null) {
+            isIgnoring = powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+        }
+        return isIgnoring;
     }
 
 
