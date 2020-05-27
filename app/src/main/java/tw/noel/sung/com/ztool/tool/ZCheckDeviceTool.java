@@ -53,11 +53,11 @@ public class ZCheckDeviceTool {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public boolean isIgnoringBatteryOptimizations() {
+    public boolean isIgnoringBatteryOptimizations(String packageName) {
         boolean isIgnoring = false;
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if(powerManager != null) {
-            isIgnoring = powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+            isIgnoring = powerManager.isIgnoringBatteryOptimizations(packageName);
         }
         return isIgnoring;
     }
