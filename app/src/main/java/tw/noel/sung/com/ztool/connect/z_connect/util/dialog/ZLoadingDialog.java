@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
+
 import tw.noel.sung.com.ztool.connect.z_connect.util.views.ZLoadingView;
 import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 
@@ -17,39 +20,45 @@ import tw.noel.sung.com.ztool.tool.ZCheckDeviceTool;
 public class ZLoadingDialog extends Dialog implements DialogInterface.OnShowListener {
 
 
-    private LinearLayout layout;
     private ZLoadingView zLoadingView;
-    private Context context;
-    private ZCheckDeviceTool zCheckDeviceTool;
-    private int phoneWidth;
-    private int phoneHeight;
+
 
     public ZLoadingDialog(Context context) {
         super(context);
-        this.context = context;
-        zCheckDeviceTool = new ZCheckDeviceTool(context);
-        int[] phoneSize = zCheckDeviceTool.getPhoneSize();
-        phoneWidth = phoneSize[0];
-        phoneHeight = phoneSize[1];
-
-        layout = new LinearLayout(context);
-        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        layout.setGravity(Gravity.CENTER);
         zLoadingView = new ZLoadingView(context);
-        layout.addView(zLoadingView);
+        initWindow(context);
+        setContentView(getLayout(context));
 
-        setContentView(layout);
         setCancelable(false);
-
-        getWindow().setLayout(phoneWidth, phoneHeight);
-
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setOnShowListener(this);
     }
+
+    //----------
 
     @Override
     public void onShow(DialogInterface dialogInterface) {
         zLoadingView.startRotateAnimation();
+    }
+
+    //----------
+
+    private void initWindow(Context context){
+        int[] phoneSize = new ZCheckDeviceTool(context).getPhoneSize();
+        int phoneWidth = phoneSize[0];
+        int phoneHeight = phoneSize[1];
+        getWindow().setLayout(phoneWidth, phoneHeight);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+    }
+
+    //----------
+
+    private View getLayout(Context context) {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.setGravity(Gravity.CENTER);
+        layout.addView(zLoadingView);
+        return layout;
     }
 
 }
